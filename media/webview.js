@@ -164,7 +164,13 @@
 		debugLog('[Mnemonica] DOM ready, d3 available: ' + (typeof d3 !== 'undefined'), 'log');
 		debugLog('[Mnemonica] THREE available: ' + (typeof THREE !== 'undefined'), 'log');
 		debugLog('[Mnemonica] Requesting data from extension...', 'log');
+		if (window.__MNEMO_VR_BRIDGE__) {
+			const theme = document.createElement('style');
+			theme.textContent = THEME_CSS_FALLBACKS;
+			document.head.insertBefore(theme, document.head.firstChild);
+		}
 		setupEventListeners();
+		setupVrButton();
 		setupLegend();
 		setupGenControlsCollapse();
 		vscode.postMessage({ command: 'ready' });
@@ -260,11 +266,11 @@
 	// feature stays discoverable
 	let sessionUiSettings = { alwaysShowCollectionSelector: true };
 
-	// The exported page runs outside VS Code, so the webview stylesheet's
-	// var(--vscode-*) theme references resolve to nothing and the panels
-	// go transparent — a :root fallback palette (a dark theme matching
-	// the in-extension look) is the export's "theme"
-	const EXPORT_CSS_FALLBACKS = `:root{
+	// Pages running outside VS Code (the export, the VR bridge page)
+	// resolve the webview stylesheet's var(--vscode-*) theme references
+	// to nothing and the panels go transparent — a :root fallback palette
+	// (a dark theme matching the in-extension look) is their "theme"
+	const THEME_CSS_FALLBACKS = `:root{
 	--vscode-editor-background:#1e1e1e;
 	--vscode-foreground:#cccccc;
 	--vscode-descriptionForeground:#9d9d9d;
@@ -286,7 +292,9 @@
 	--vscode-titleBar-activeBackground:#1f1f1f;
 	--vscode-titleBar-activeForeground:#cccccc;
 }
-#controls{display:none!important}
+`;
+	// The export has no host behind it: no buttons, no collection switch
+	const EXPORT_CSS_FALLBACKS = THEME_CSS_FALLBACKS + `#controls{display:none!important}
 #collection-select{display:none!important}
 `;
 
@@ -1377,6 +1385,109 @@ window.acquireVsCodeApi = function () {
 		// 3D-only: the mode toggle buttons no longer exist in the DOM.
 	}
 
+	// The live WebXR session (toggleVr), null outside VR
+	let xrSession = null;
+	// An updateGraph arriving mid-session waits for the session to end:
+	// a rebuild swaps the WebGL renderer, which the session cannot follow.
+	// Only the newest one matters — it replays when VR ends (leaveVr)
+	let deferredGraphUpdate = null;
+
+	async function immersiveVrSupported() {
+		if (!navigator.xr || typeof navigator.xr.isSessionSupported !== 'function') {
+			return false;
+		}
+		try {
+			const supported = await navigator.xr.isSessionSupported('immersive-vr');
+			return supported;
+		} catch (err) {
+			// A permissions policy without xr-spatial-tracking rejects
+			return false;
+		}
+	}
+
+	// The 🥽 VR button. Where this page can open an immersive-vr session
+	// itself — Chrome/Edge with an OpenXR runtime such as Meta Quest
+	// Link, i.e. the VR bridge page — it enters VR in place. Editor
+	// webviews cannot (VS Code's webview iframe withholds the
+	// xr-spatial-tracking permission): there the button asks the host to
+	// serve this graph to the system browser ('openVR')
+	function setupVrButton() {
+		const button = document.getElementById('vr-mode');
+		if (!button) { return; }
+		immersiveVrSupported().then(function (supported) {
+			if (supported) {
+				button.title = 'Enter VR (WebXR immersive-vr)';
+				button.style.display = '';
+				button.addEventListener('click', function () {
+					button.blur();
+					void toggleVr(button);
+				});
+				return;
+			}
+			if (window.__MNEMO_VR_BRIDGE__) {
+				// The bridge page in a browser without a VR runtime
+				button.title = 'No WebXR VR runtime here: open this page in Chrome or Edge with Meta Quest Link as the active OpenXR runtime, then reload';
+				button.disabled = true;
+				button.style.display = '';
+				return;
+			}
+			button.title = 'Open this graph in the system browser for VR (Chrome/Edge + Meta Quest Link)';
+			button.style.display = '';
+			button.addEventListener('click', function () {
+				button.blur();
+				vscode.postMessage({ command: 'openVR' });
+			});
+		});
+	}
+
+	async function toggleVr(button) {
+		if (xrSession) {
+			await xrSession.end();
+			return;
+		}
+		if (!renderer3D) { return; }
+		let session;
+		try {
+			session = await navigator.xr.requestSession('immersive-vr', {
+				optionalFeatures : ['local-floor', 'bounded-floor', 'hand-tracking']
+			});
+		} catch (err) {
+			setStatusBase('VR unavailable: ' + (err && err.message ? err.message : String(err)));
+			return;
+		}
+		xrSession = session;
+		button.textContent = '🥽 Exit VR';
+		// The renderer that entered owns the exit — three fires
+		// 'sessionend' once it has restored its own canvas state
+		const xrRenderer = renderer3D;
+		const onSessionEnd = function () {
+			xrRenderer.renderer.xr.removeEventListener('sessionend', onSessionEnd);
+			leaveVr(xrRenderer, button);
+		};
+		xrRenderer.renderer.xr.addEventListener('sessionend', onSessionEnd);
+		try {
+			await xrRenderer.enterXR(session);
+		} catch (err) {
+			xrRenderer.renderer.xr.removeEventListener('sessionend', onSessionEnd);
+			leaveVr(xrRenderer, button);
+			session.end().catch(function () {});
+			setStatusBase('VR failed: ' + (err && err.message ? err.message : String(err)));
+		}
+	}
+
+	function leaveVr(xrRenderer, button) {
+		xrRenderer.exitXR();
+		xrSession = null;
+		button.textContent = '🥽 VR';
+		if (deferredGraphUpdate) {
+			// Re-dispatched through the message handler: now outside VR
+			// it rebuilds like any updateGraph
+			const message = deferredGraphUpdate;
+			deferredGraphUpdate = null;
+			window.postMessage(message, '*');
+		}
+	}
+
 	// The exported file must be shareable as-is (GitHub included), so the
 	// bundle is scrubbed: locations/file paths are garbage there and go
 	// in EVERY export; diamond/bagel ids ARE scope ids and call sites
@@ -1709,6 +1820,10 @@ window.acquireVsCodeApi = function () {
 		}
 
 		if (message.command === 'updateGraph') {
+			if (xrSession) {
+				deferredGraphUpdate = message;
+				return;
+			}
 			currentData = message.data;
 			if (message.settings) {
 				applyUiSettings(message.settings);
@@ -2602,7 +2717,8 @@ window.acquireVsCodeApi = function () {
 			// The maroon origin marker — tracked so re-renders dispose it.
 			// It belongs to the types layer (updateCenterMarkerVisibility)
 			this.centerMarker = null;
-			this.animationId = null;
+			// WebXR session state (enterXR/exitXR); null on the desktop
+			this.xr = null;
 			this.onNodeClick = null;
 			this.mouse = { x: 0, y: 0 };
 			this.isDragging = false;
@@ -2759,6 +2875,12 @@ window.acquireVsCodeApi = function () {
 			this.scene = new THREE.Scene();
 			const editorBg = getComputedStyle(document.body).getPropertyValue('--vscode-editor-background').trim();
 			this.scene.background = new THREE.Color(editorBg || '#1e1e1e');
+			// Everything the graph draws hangs off graphRoot, never off the
+			// scene: the desktop leaves it at identity, WebXR scales and
+			// moves it into a tabletop model (enterXR) while the lights
+			// and the controllers stay in room space
+			this.graphRoot = new THREE.Group();
+			this.scene.add(this.graphRoot);
 
 			// Create camera with better initial position
 			const width = this.container.clientWidth || 800;
@@ -2816,8 +2938,10 @@ window.acquireVsCodeApi = function () {
 			// Setup interaction
 			this.setupInteraction();
 
-			// Start render loop
-			this.animate();
+			// Start render loop — setAnimationLoop, not window rAF: during
+			// an immersive session only the XRSession's frame loop ticks,
+			// and three switches the loop over by itself
+			this.renderer.setAnimationLoop(() => this.animate());
 		}
 
 		setupInteraction() {
@@ -3256,22 +3380,7 @@ window.acquireVsCodeApi = function () {
 				const intersects = this.raycaster.intersectObjects(this.interactive);
 				const dblHit = firstVisibleIntersect(intersects);
 				if (dblHit) {
-					const hitMesh = dblHit.object;
-					const node = hitMesh.userData.node;
-					if (node) {
-						this.handleNodeDoubleClick3D(node, e);
-					} else {
-						// Diamonds jump to their scope, bagels to the wrap
-						// call site; knots cite sources outside the
-						// workspace — no jump there
-						const jumpNode = hitMesh.userData.creationNode || hitMesh.userData.wrapperNode;
-						if (jumpNode && jumpNode.location && vscodeRef) {
-							vscodeRef.postMessage({
-								command : 'goToDefinition',
-								data    : jumpNode.location
-							});
-						}
-					}
+					this.openMeshSource(dblHit.object);
 				}
 			});
 
@@ -4001,7 +4110,7 @@ window.acquireVsCodeApi = function () {
 				opacity     : 0.85
 			});
 			sel.tube = new THREE.Mesh(tubeGeo, tubeMat);
-			this.scene.add(sel.tube);
+			this.graphRoot.add(sel.tube);
 		}
 
 		// Enter trace mode: isolate the resolved lineage — path spheres
@@ -4449,6 +4558,26 @@ window.acquireVsCodeApi = function () {
 			}
 		}
 
+		// Jump to the code behind a picked element (double-click, the XR
+		// A/X button): spheres to their define(), diamonds to their
+		// scope, bagels to the wrap call site; knots cite sources outside
+		// the workspace — no jump there
+		openMeshSource(mesh) {
+			const node = mesh.userData.node;
+			if (node) {
+				this.handleNodeDoubleClick3D(node);
+				return;
+			}
+			if (ANONYMIZE) { return; }
+			const jumpNode = mesh.userData.creationNode || mesh.userData.wrapperNode;
+			if (jumpNode && jumpNode.location && vscodeRef) {
+				vscodeRef.postMessage({
+					command : 'goToDefinition',
+					data    : jumpNode.location
+				});
+			}
+		}
+
 		handleNodeDoubleClick3D(node, _event) {
 			if (ANONYMIZE) { return; } // no jump targets in a shapes-only page
 			// Double click - jump to definition
@@ -4620,9 +4749,9 @@ window.acquireVsCodeApi = function () {
 			this.typesGroup.visible = layerVisibility.types;
 			this.instrumentationGroup.visible = layerVisibility.instrumentation;
 			this.diveGroup.visible = layerVisibility.dive;
-			this.scene.add(this.typesGroup);
-			this.scene.add(this.instrumentationGroup);
-			this.scene.add(this.diveGroup);
+			this.graphRoot.add(this.typesGroup);
+			this.graphRoot.add(this.instrumentationGroup);
+			this.graphRoot.add(this.diveGroup);
 
 			// Restore 3D coordinates if they exist
 			data.nodes.forEach(node => {
@@ -4895,7 +5024,7 @@ window.acquireVsCodeApi = function () {
 			const centerSphere = new THREE.Mesh(centerGeometry, centerMaterial);
 			centerSphere.position.set(0, 0, 0);
 			this.centerMarker = centerSphere;
-			this.scene.add(centerSphere);
+			this.graphRoot.add(centerSphere);
 			// The shown collection's display name: the collections.json
 			// name when the manifest exists, else the raw id
 			// ('defaultTypes' for the default universe). The combined
@@ -7127,7 +7256,7 @@ window.acquireVsCodeApi = function () {
 			mesh.userData.label = sprite;
 			mesh.userData.labelScale = scale;
 			mesh.userData.labelWidth = worldWidth * scale;
-			this.scene.add(sprite);
+			this.graphRoot.add(sprite);
 			// The sign rides the caption vector (VIEW space) from birth —
 			// screen-up by default, steady on rotation; labeledMeshes
 			// feeds the camera watcher
@@ -7158,7 +7287,16 @@ window.acquireVsCodeApi = function () {
 			defineComputedVisible(leader, captionVisible);
 			mesh.userData.leader = leader;
 			this.leaderLines.push(leader);
-			this.scene.add(leader);
+			this.graphRoot.add(leader);
+		}
+
+		// The rotation captions ride: the camera's, expressed in graphRoot
+		// space. On the desktop the root never turns, so it IS the camera
+		// quaternion; in XR it is the headset relative to the grabbed model
+		captionViewQuaternion() {
+			const view = this.captionViewScratch || (this.captionViewScratch = new THREE.Quaternion());
+			view.copy(this.graphRoot.quaternion).invert().multiply(this.camera.quaternion);
+			return view;
 		}
 
 		updateLabelPosition(mesh) {
@@ -7173,14 +7311,15 @@ window.acquireVsCodeApi = function () {
 				// (captionViewOffset) carries its own direction AND
 				// distance, still view-relative
 				const world = this.captionScratch || (this.captionScratch = new THREE.Vector3());
+				const view = this.captionViewQuaternion();
 				if (mesh.userData.captionViewOffset) {
-					world.copy(mesh.userData.captionViewOffset).applyQuaternion(this.camera.quaternion);
+					world.copy(mesh.userData.captionViewOffset).applyQuaternion(view);
 				} else {
 					// captionDist: the wheel's multiplier from the
 					// vector-sphere control (×1.00 default)
 					const signed = (mesh.userData.labelOffsetY !== undefined ? mesh.userData.labelOffsetY : 35 * scale)
 						* this.captionDist;
-					world.copy(this.captionVector).applyQuaternion(this.camera.quaternion).multiplyScalar(signed);
+					world.copy(this.captionVector).applyQuaternion(view).multiplyScalar(signed);
 				}
 				label.position.set(
 					mesh.position.x + world.x,
@@ -7361,13 +7500,411 @@ window.acquireVsCodeApi = function () {
 			this.onNodeClick = handler;
 		}
 
+		// ── WebXR ─────────────────────────────────────────────────────
+		// The headset view of the SAME scene: enterXR scales graphRoot
+		// into a model XR_MODEL_SIZE metres across, floating in front of
+		// the viewer (local-floor space, metres), and three drives the
+		// camera from the headset pose. Controllers ray-pick the mouse's
+		// own `interactive` set:
+		//   trigger / pinch   select: focus glow + info card on that hand;
+		//                     on empty space, clear
+		//   grip (hold)       grab: the model follows the hand rigidly
+		//   thumbstick        ← → turn the model, ↑ ↓ grow / shrink it
+		//   A / X             open the selected element's code in the editor
+		//   B / Y             re-seat the model
+		static get XR_MODEL_SIZE() { return 1.2; }
+		static get XR_MODEL_CENTER() { return new THREE.Vector3(0, 1.3, -1.0); }
+		static get XR_RAY_LENGTH() { return 5; }
+		static get XR_STICK_DEADZONE() { return 0.15; }
+		// Thumbstick rates: radians per second, e-folds of scale per second
+		static get XR_TURN_RATE() { return 1.5; }
+		static get XR_GROW_RATE() { return 0.8; }
+
+		async enterXR(session) {
+			const renderer = this.renderer;
+			renderer.xr.enabled = true;
+			renderer.xr.setReferenceSpaceType('local-floor');
+			renderer.xr.setFoveation(1);
+			this.xr = {
+				fog         : this.scene.fog,
+				cameraFov   : this.camera.fov,
+				controllers : [],
+				grab        : null,
+				selected    : null,
+				card        : this.createXRCard(),
+				// The graph-space point turns and scaling pivot around,
+				// and the scale fitXR seated (the stick clamps around it)
+				pivot       : new THREE.Vector3(),
+				fitScale    : 1,
+				lastTick    : 0,
+				raycaster   : new THREE.Raycaster()
+			};
+			// Fog distances are graph units: over a metre-sized model they
+			// never bite — XR draws without fog
+			this.scene.fog = null;
+			// Stereo depth: a sign drawn over a nearer sphere floats at the
+			// wrong depth for one eye — captions depth-test in XR
+			this.setCaptionsDepthTest(true);
+			for (let index = 0; index < 2; index++) {
+				this.xr.controllers.push(this.createXRController(index));
+			}
+			this.fitXR();
+			await renderer.xr.setSession(session);
+		}
+
+		exitXR() {
+			const xr = this.xr;
+			if (!xr) { return; }
+			this.xr = null;
+			xr.controllers.forEach(entry => {
+				Object.keys(entry.listeners).forEach(type => {
+					entry.controller.removeEventListener(type, entry.listeners[type]);
+				});
+				entry.controller.remove(entry.ray);
+				this.scene.remove(entry.controller);
+				this.scene.remove(entry.reticle);
+				entry.ray.geometry.dispose();
+				entry.ray.material.dispose();
+				entry.reticle.geometry.dispose();
+				entry.reticle.material.dispose();
+			});
+			if (xr.card.parent) {
+				xr.card.parent.remove(xr.card);
+			}
+			xr.card.geometry.dispose();
+			xr.card.material.map.dispose();
+			xr.card.material.dispose();
+			if (xr.selected && xr.selected === this.focusedMesh) {
+				this.setFocusedMesh(null);
+			}
+			this.renderer.xr.enabled = false;
+			this.scene.fog = xr.fog;
+			this.setCaptionsDepthTest(false);
+			this.graphRoot.position.set(0, 0, 0);
+			this.graphRoot.quaternion.identity();
+			this.graphRoot.scale.setScalar(1);
+			// The headset wrote its pose and projection into the camera —
+			// the orbit state rebuilds the desktop view
+			this.camera.fov = xr.cameraFov;
+			this.camera.zoom = 1;
+			this.camera.scale.set(1, 1, 1);
+			this.resize(this.container.clientWidth || 800, this.container.clientHeight || 600);
+			this.updateCameraPosition();
+		}
+
+		setCaptionsDepthTest(on) {
+			this.labeledMeshes.forEach(mesh => {
+				if (mesh.userData.label) {
+					mesh.userData.label.material.depthTest = on;
+				}
+			});
+			this.needsRender = true;
+		}
+
+		// One XR input: three's target-ray controller group plus our ray
+		// (child of the group, metres along -Z) and the hit reticle (room
+		// space). Listeners are kept so exitXR can unhook them — the
+		// groups outlive the session inside three's WebXRManager
+		createXRController(index) {
+			const controller = this.renderer.xr.getController(index);
+			const ray = new THREE.Line(
+				new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -1)]),
+				new THREE.LineBasicMaterial({ color: 0x9aa0a6, transparent: true, opacity: 0.8 })
+			);
+			ray.scale.z = Graph3DRenderer.XR_RAY_LENGTH;
+			controller.add(ray);
+			const reticle = new THREE.Mesh(
+				new THREE.SphereGeometry(0.006, 12, 8),
+				new THREE.MeshBasicMaterial({ color: 0xffffff })
+			);
+			reticle.visible = false;
+			this.scene.add(reticle);
+			const entry = {
+				controller,
+				ray,
+				reticle,
+				inputSource : null,
+				hovered     : null,
+				buttonA     : false,
+				buttonB     : false,
+				listeners   : null
+			};
+			entry.listeners = {
+				connected    : (event) => { entry.inputSource = event.data; },
+				disconnected : () => {
+					entry.inputSource = null;
+					entry.hovered = null;
+					if (this.xr && this.xr.grab && this.xr.grab.entry === entry) {
+						this.xr.grab = null;
+					}
+				},
+				select       : () => this.selectXR(entry),
+				squeezestart : () => this.grabXR(entry),
+				squeezeend   : () => {
+					if (this.xr && this.xr.grab && this.xr.grab.entry === entry) {
+						this.xr.grab = null;
+					}
+				}
+			};
+			Object.keys(entry.listeners).forEach(type => {
+				controller.addEventListener(type, entry.listeners[type]);
+			});
+			this.scene.add(controller);
+			return entry;
+		}
+
+		// Seat the model: graphRoot scaled so the graph's largest extent
+		// is XR_MODEL_SIZE metres, its centre at XR_MODEL_CENTER, upright
+		// and facing the viewer the way the desktop's default camera does
+		fitXR() {
+			const xr = this.xr;
+			if (!xr) { return; }
+			const root = this.graphRoot;
+			root.position.set(0, 0, 0);
+			root.quaternion.identity();
+			root.scale.setScalar(1);
+			root.updateMatrixWorld(true);
+			const box = new THREE.Box3().setFromObject(root);
+			const center = new THREE.Vector3();
+			const size = new THREE.Vector3(1, 1, 1);
+			if (!box.isEmpty()) {
+				box.getCenter(center);
+				box.getSize(size);
+			}
+			const scale = Graph3DRenderer.XR_MODEL_SIZE / Math.max(size.x, size.y, size.z, 1);
+			root.scale.setScalar(scale);
+			root.position.copy(Graph3DRenderer.XR_MODEL_CENTER).addScaledVector(center, -scale);
+			xr.pivot.copy(center);
+			xr.fitScale = scale;
+			this.needsRender = true;
+		}
+
+		// Turn the model around the vertical through its pivot and scale
+		// it about the pivot — the pivot holds its spot in the room
+		turnXR(angle, factor) {
+			const xr = this.xr;
+			const root = this.graphRoot;
+			const scale = THREE.MathUtils.clamp(root.scale.x * factor, xr.fitScale / 10, xr.fitScale * 30);
+			const appliedFactor = scale / root.scale.x;
+			root.updateMatrixWorld(true);
+			const pivot = root.localToWorld(xr.pivot.clone());
+			const spin = new THREE.Quaternion().setFromAxisAngle(ORBIT_YAW_AXIS, angle);
+			root.position.sub(pivot).applyQuaternion(spin).multiplyScalar(appliedFactor).add(pivot);
+			root.quaternion.premultiply(spin);
+			root.scale.setScalar(scale);
+		}
+
+		grabXR(entry) {
+			const xr = this.xr;
+			if (!xr || !entry.inputSource) { return; }
+			entry.controller.updateMatrixWorld(true);
+			this.graphRoot.updateMatrix();
+			// graphRoot hangs off the untransformed scene: its matrix IS
+			// its world matrix. Offset = hand₀⁻¹ × root₀
+			xr.grab = {
+				entry,
+				offset : entry.controller.matrixWorld.clone().invert().multiply(this.graphRoot.matrix)
+			};
+		}
+
+		selectXR(entry) {
+			const xr = this.xr;
+			if (!xr) { return; }
+			const mesh = entry.hovered;
+			xr.selected = mesh;
+			// The focus glow is the spheres' own selection look
+			if (!mesh || mesh.userData.node) {
+				this.setFocusedMesh(mesh);
+			}
+			this.showXRCard(mesh, entry);
+		}
+
+		// Per-frame XR work (animate): the grab, the thumbsticks, the ray
+		// picks and the A/B buttons. three has already written this
+		// frame's controller poses into their groups
+		updateXR() {
+			const xr = this.xr;
+			const now = performance.now();
+			const dt = xr.lastTick ? Math.min((now - xr.lastTick) / 1000, 0.1) : 0;
+			xr.lastTick = now;
+			const root = this.graphRoot;
+			if (xr.grab) {
+				// The model rides the hand rigidly: hand × hand₀⁻¹ × root₀
+				const hand = xr.grab.entry.controller;
+				hand.updateMatrixWorld(true);
+				const placed = this.xrScratchMatrix || (this.xrScratchMatrix = new THREE.Matrix4());
+				placed.multiplyMatrices(hand.matrixWorld, xr.grab.offset);
+				placed.decompose(root.position, root.quaternion, root.scale);
+			}
+			const deadzone = Graph3DRenderer.XR_STICK_DEADZONE;
+			let turn = 0;
+			let grow = 0;
+			xr.controllers.forEach(entry => {
+				const gamepad = entry.inputSource && entry.inputSource.gamepad;
+				if (!gamepad) { return; }
+				// xr-standard mapping: axes 2/3 the thumbstick, buttons
+				// 4/5 A/B (right hand) or X/Y (left hand)
+				const stickX = gamepad.axes[2] || 0;
+				const stickY = gamepad.axes[3] || 0;
+				if (Math.abs(stickX) > deadzone) { turn += stickX; }
+				// Pushing the stick forward reads negative — forward grows
+				if (Math.abs(stickY) > deadzone) { grow -= stickY; }
+				const pressedA = Boolean(gamepad.buttons[4] && gamepad.buttons[4].pressed);
+				const pressedB = Boolean(gamepad.buttons[5] && gamepad.buttons[5].pressed);
+				if (pressedA && !entry.buttonA && xr.selected) {
+					this.openMeshSource(xr.selected);
+				}
+				if (pressedB && !entry.buttonB) {
+					xr.grab = null;
+					this.fitXR();
+				}
+				entry.buttonA = pressedA;
+				entry.buttonB = pressedB;
+			});
+			if (!xr.grab && (turn !== 0 || grow !== 0)) {
+				this.turnXR(turn * Graph3DRenderer.XR_TURN_RATE * dt, Math.exp(grow * Graph3DRenderer.XR_GROW_RATE * dt));
+			}
+			// Picks run against this frame's model placement
+			root.updateMatrixWorld(true);
+			const rotation = this.xrScratchRotation || (this.xrScratchRotation = new THREE.Matrix4());
+			const ray = xr.raycaster.ray;
+			xr.controllers.forEach(entry => {
+				const controller = entry.controller;
+				if (!entry.inputSource || !controller.visible) {
+					entry.hovered = null;
+					entry.reticle.visible = false;
+					return;
+				}
+				controller.updateMatrixWorld(true);
+				rotation.extractRotation(controller.matrixWorld);
+				ray.origin.setFromMatrixPosition(controller.matrixWorld);
+				ray.direction.set(0, 0, -1).applyMatrix4(rotation);
+				const hit = firstVisibleIntersect(xr.raycaster.intersectObjects(this.interactive));
+				entry.hovered = hit ? hit.object : null;
+				entry.ray.scale.z = hit ? hit.distance : Graph3DRenderer.XR_RAY_LENGTH;
+				entry.ray.material.color.setHex(hit ? 0xffffff : 0x9aa0a6);
+				entry.reticle.visible = Boolean(hit);
+				if (hit) {
+					entry.reticle.position.copy(hit.point);
+				}
+			});
+		}
+
+		// The info card: a canvas-textured plane riding the selecting
+		// hand, above and ahead of it, tilted toward the eyes — the XR
+		// stand-in for the DOM tooltip
+		createXRCard() {
+			const canvas = document.createElement('canvas');
+			canvas.width = 1024;
+			canvas.height = 576;
+			const texture = new THREE.CanvasTexture(canvas);
+			texture.minFilter = THREE.LinearFilter;
+			const card = new THREE.Mesh(
+				new THREE.PlaneGeometry(0.24, 0.135),
+				new THREE.MeshBasicMaterial({ map: texture, transparent: true })
+			);
+			card.position.set(0, 0.08, -0.14);
+			card.rotation.x = -0.5;
+			card.visible = false;
+			return card;
+		}
+
+		showXRCard(mesh, entry) {
+			const card = this.xr.card;
+			// Shapes-only pages show no names anywhere
+			if (!mesh || ANONYMIZE) {
+				card.visible = false;
+				return;
+			}
+			const lines = this.xrCardLines(mesh);
+			const canvas = card.material.map.image;
+			const ctx = canvas.getContext('2d');
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			ctx.fillStyle = 'rgba(37, 37, 38, 0.94)';
+			ctx.strokeStyle = '#454545';
+			ctx.lineWidth = 4;
+			ctx.beginPath();
+			ctx.roundRect(2, 2, canvas.width - 4, canvas.height - 4, 24);
+			ctx.fill();
+			ctx.stroke();
+			const fit = (text) => {
+				let shown = text;
+				while (shown.length > 1 && ctx.measureText(shown).width > canvas.width - 80) {
+					shown = shown.slice(0, -2) + '…';
+				}
+				return shown;
+			};
+			let y = 76;
+			lines.body.forEach((line, index) => {
+				ctx.font = index === 0 ? 'bold 52px system-ui, sans-serif' : '36px system-ui, sans-serif';
+				ctx.fillStyle = index === 0 ? '#ffffff' : '#cccccc';
+				ctx.fillText(fit(line), 40, y);
+				y += index === 0 ? 64 : 46;
+			});
+			if (lines.hint) {
+				ctx.font = '30px system-ui, sans-serif';
+				ctx.fillStyle = '#9aa0a6';
+				ctx.fillText(fit(lines.hint), 40, canvas.height - 36);
+			}
+			card.material.map.needsUpdate = true;
+			if (card.parent !== entry.controller) {
+				entry.controller.add(card);
+			}
+			card.visible = true;
+		}
+
+		// The card's text for a picked element: title, kind line, a few
+		// facts, and the jump hint when there is code to jump to
+		xrCardLines(mesh) {
+			const site = (location) => (location && typeof location === 'object' && location.fileName)
+				? location.fileName.split('/').pop() + ':' + location.line
+				: null;
+			const data = mesh.userData;
+			const body = [];
+			let jump = null;
+			if (data.node) {
+				const node = data.node;
+				body.push(node.name, 'type · depth ' + node.depth);
+				(node.properties || []).slice(0, 5).forEach(p => body.push(p.name + ': ' + p.type));
+				jump = site(node.definitionLocation || node.location);
+			} else if (data.creationNode) {
+				const node = data.creationNode;
+				body.push(node.name, node.kind + (node.starter ? ' · starter' : ''));
+				const creates = (node.creates || []).map(c => c.typePath.split('.').pop());
+				if (creates.length) { body.push('creates: ' + creates.join(', ')); }
+				jump = site(node.location);
+			} else if (data.wrapperNode) {
+				const node = data.wrapperNode;
+				body.push(node.name, 'wrap · generation ' + node.generation);
+				if (node.wrapsTypePath) { body.push('wraps: ' + node.wrapsTypePath); }
+				if (node.hostTypePath) { body.push('produced by: ' + node.hostTypePath); }
+				jump = site(node.location);
+			} else if (data.internalNode) {
+				const knot = data.internalNode;
+				body.push(knot.name, knot.role);
+				if (knot.citation) { body.push('mirrors: ' + knot.citation); }
+			}
+			if (jump) { body.push(jump); }
+			const lines = {
+				body,
+				hint : jump ? 'A / X — open in editor · B / Y — re-seat' : 'B / Y — re-seat'
+			};
+			return lines;
+		}
+
 		animate() {
-			this.animationId = requestAnimationFrame(() => this.animate());
+			// In XR the headset moves every frame: controllers pick, the
+			// grabbed model follows, and the frame always paints
+			if (this.xr) {
+				this.updateXR();
+				this.needsRender = true;
+			}
 			// Captions are VIEW-relative: a camera move re-anchors every
 			// sign straight from the vector — no dynamics pass, just the
 			// quaternion watch
-			if (!this.camera.quaternion.equals(this.lastCameraQuaternion)) {
-				this.lastCameraQuaternion.copy(this.camera.quaternion);
+			const viewQuaternion = this.captionViewQuaternion();
+			if (!viewQuaternion.equals(this.lastCameraQuaternion)) {
+				this.lastCameraQuaternion.copy(viewQuaternion);
 				this.labeledMeshes.forEach(m => this.updateLabelPosition(m));
 				this.needsRender = true;
 			}
@@ -7560,7 +8097,7 @@ window.acquireVsCodeApi = function () {
 			this.internalsDynamics = [];
 
 			if (this.centerMarker) {
-				this.scene.remove(this.centerMarker);
+				this.graphRoot.remove(this.centerMarker);
 				if (this.centerMarker.userData.label) {
 					const label = this.centerMarker.userData.label;
 					if (label.parent) {
@@ -7590,15 +8127,15 @@ window.acquireVsCodeApi = function () {
 
 			// Layer groups are rebuilt by renderGraph
 			if (this.typesGroup) {
-				this.scene.remove(this.typesGroup);
+				this.graphRoot.remove(this.typesGroup);
 				this.typesGroup = null;
 			}
 			if (this.instrumentationGroup) {
-				this.scene.remove(this.instrumentationGroup);
+				this.graphRoot.remove(this.instrumentationGroup);
 				this.instrumentationGroup = null;
 			}
 			if (this.diveGroup) {
-				this.scene.remove(this.diveGroup);
+				this.graphRoot.remove(this.diveGroup);
 				this.diveGroup = null;
 			}
 		}
@@ -7612,11 +8149,8 @@ window.acquireVsCodeApi = function () {
 				this.buildRafId = null;
 			}
 			this.clear();
-			if (this.animationId) {
-				cancelAnimationFrame(this.animationId);
-				this.animationId = null;
-			}
 			if (this.renderer) {
+				this.renderer.setAnimationLoop(null);
 				this.renderer.dispose();
 				if (this.renderer.domElement.parentNode === this.container) {
 					this.container.removeChild(this.renderer.domElement);
