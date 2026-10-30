@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-10-30T17:14:54.521Z",
+  "generatedAt": "2026-10-30T17:34:49.651Z",
   "scopes": {
     "src/topologica/bootstrap.ts": {
       "scopeId": "src/topologica/bootstrap.ts",
@@ -2126,173 +2126,221 @@
       "filePath": "src/webview/vrBridge.ts",
       "location": "src/webview/vrBridge.ts:1:1"
     },
-    "src/webview/vrBridge.ts:108:2": {
-      "scopeId": "src/webview/vrBridge.ts:108:2",
+    "src/webview/vrBridge.ts:153:2": {
+      "scopeId": "src/webview/vrBridge.ts:153:2",
       "name": "VrBridge.constructor",
       "kind": "method",
       "parentScopeId": "src/webview/vrBridge.ts",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:108:2"
+      "location": "src/webview/vrBridge.ts:153:2"
     },
-    "src/webview/vrBridge.ts:110:53": {
-      "scopeId": "src/webview/vrBridge.ts:110:53",
-      "name": "src/webview/vrBridge.ts:110",
+    "src/webview/vrBridge.ts:156:30": {
+      "scopeId": "src/webview/vrBridge.ts:156:30",
+      "name": "src/webview/vrBridge.ts:156",
       "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:108:2",
+      "parentScopeId": "src/webview/vrBridge.ts:153:2",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:110:53"
-    },
-    "src/webview/vrBridge.ts:117:2": {
-      "scopeId": "src/webview/vrBridge.ts:117:2",
-      "name": "VrBridge.open",
-      "kind": "method",
-      "parentScopeId": "src/webview/vrBridge.ts",
-      "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:117:2"
-    },
-    "src/webview/vrBridge.ts:126:2": {
-      "scopeId": "src/webview/vrBridge.ts:126:2",
-      "name": "VrBridge.broadcast",
-      "kind": "method",
-      "parentScopeId": "src/webview/vrBridge.ts",
-      "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:126:2"
-    },
-    "src/webview/vrBridge.ts:139:2": {
-      "scopeId": "src/webview/vrBridge.ts:139:2",
-      "name": "VrBridge.close",
-      "kind": "method",
-      "parentScopeId": "src/webview/vrBridge.ts",
-      "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:139:2"
-    },
-    "src/webview/vrBridge.ts:150:2": {
-      "scopeId": "src/webview/vrBridge.ts:150:2",
-      "name": "VrBridge.dispose",
-      "kind": "method",
-      "parentScopeId": "src/webview/vrBridge.ts",
-      "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:150:2"
+      "location": "src/webview/vrBridge.ts:156:30"
     },
     "src/webview/vrBridge.ts:165:2": {
       "scopeId": "src/webview/vrBridge.ts:165:2",
-      "name": "VrBridge.start",
+      "name": "VrBridge.open",
       "kind": "method",
       "parentScopeId": "src/webview/vrBridge.ts",
       "filePath": "src/webview/vrBridge.ts",
       "location": "src/webview/vrBridge.ts:165:2"
     },
-    "src/webview/vrBridge.ts:169:40": {
-      "scopeId": "src/webview/vrBridge.ts:169:40",
-      "name": "src/webview/vrBridge.ts:169",
-      "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:165:2",
+    "src/webview/vrBridge.ts:174:2": {
+      "scopeId": "src/webview/vrBridge.ts:174:2",
+      "name": "VrBridge.has",
+      "kind": "method",
+      "parentScopeId": "src/webview/vrBridge.ts",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:169:40"
+      "location": "src/webview/vrBridge.ts:174:2"
     },
-    "src/webview/vrBridge.ts:170:37": {
-      "scopeId": "src/webview/vrBridge.ts:170:37",
-      "name": "src/webview/vrBridge.ts:170",
-      "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:169:40",
+    "src/webview/vrBridge.ts:181:2": {
+      "scopeId": "src/webview/vrBridge.ts:181:2",
+      "name": "VrBridge.libraryUrl",
+      "kind": "method",
+      "parentScopeId": "src/webview/vrBridge.ts",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:170:37"
+      "location": "src/webview/vrBridge.ts:181:2"
     },
-    "src/webview/vrBridge.ts:172:25": {
-      "scopeId": "src/webview/vrBridge.ts:172:25",
-      "name": "src/webview/vrBridge.ts:172",
-      "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:169:40",
+    "src/webview/vrBridge.ts:187:2": {
+      "scopeId": "src/webview/vrBridge.ts:187:2",
+      "name": "VrBridge.broadcast",
+      "kind": "method",
+      "parentScopeId": "src/webview/vrBridge.ts",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:172:25"
+      "location": "src/webview/vrBridge.ts:187:2"
     },
-    "src/webview/vrBridge.ts:173:25": {
-      "scopeId": "src/webview/vrBridge.ts:173:25",
-      "name": "src/webview/vrBridge.ts:173",
-      "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:169:40",
+    "src/webview/vrBridge.ts:200:2": {
+      "scopeId": "src/webview/vrBridge.ts:200:2",
+      "name": "VrBridge.close",
+      "kind": "method",
+      "parentScopeId": "src/webview/vrBridge.ts",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:173:25"
+      "location": "src/webview/vrBridge.ts:200:2"
     },
-    "src/webview/vrBridge.ts:178:34": {
-      "scopeId": "src/webview/vrBridge.ts:178:34",
-      "name": "src/webview/vrBridge.ts:178",
-      "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:169:40",
+    "src/webview/vrBridge.ts:211:2": {
+      "scopeId": "src/webview/vrBridge.ts:211:2",
+      "name": "VrBridge.dispose",
+      "kind": "method",
+      "parentScopeId": "src/webview/vrBridge.ts",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:178:34"
+      "location": "src/webview/vrBridge.ts:211:2"
     },
-    "src/webview/vrBridge.ts:191:2": {
-      "scopeId": "src/webview/vrBridge.ts:191:2",
+    "src/webview/vrBridge.ts:228:2": {
+      "scopeId": "src/webview/vrBridge.ts:228:2",
+      "name": "VrBridge.ensureLibraries",
+      "kind": "method",
+      "parentScopeId": "src/webview/vrBridge.ts",
+      "filePath": "src/webview/vrBridge.ts",
+      "location": "src/webview/vrBridge.ts:228:2"
+    },
+    "src/webview/vrBridge.ts:238:34": {
+      "scopeId": "src/webview/vrBridge.ts:238:34",
+      "name": "src/webview/vrBridge.ts:238",
+      "kind": "arrow",
+      "parentScopeId": "src/webview/vrBridge.ts:228:2",
+      "filePath": "src/webview/vrBridge.ts",
+      "location": "src/webview/vrBridge.ts:238:34"
+    },
+    "src/webview/vrBridge.ts:268:2": {
+      "scopeId": "src/webview/vrBridge.ts:268:2",
+      "name": "VrBridge.verified",
+      "kind": "method",
+      "parentScopeId": "src/webview/vrBridge.ts",
+      "filePath": "src/webview/vrBridge.ts",
+      "location": "src/webview/vrBridge.ts:268:2"
+    },
+    "src/webview/vrBridge.ts:277:2": {
+      "scopeId": "src/webview/vrBridge.ts:277:2",
+      "name": "VrBridge.start",
+      "kind": "method",
+      "parentScopeId": "src/webview/vrBridge.ts",
+      "filePath": "src/webview/vrBridge.ts",
+      "location": "src/webview/vrBridge.ts:277:2"
+    },
+    "src/webview/vrBridge.ts:283:40": {
+      "scopeId": "src/webview/vrBridge.ts:283:40",
+      "name": "src/webview/vrBridge.ts:283",
+      "kind": "arrow",
+      "parentScopeId": "src/webview/vrBridge.ts:277:2",
+      "filePath": "src/webview/vrBridge.ts",
+      "location": "src/webview/vrBridge.ts:283:40"
+    },
+    "src/webview/vrBridge.ts:284:37": {
+      "scopeId": "src/webview/vrBridge.ts:284:37",
+      "name": "src/webview/vrBridge.ts:284",
+      "kind": "arrow",
+      "parentScopeId": "src/webview/vrBridge.ts:283:40",
+      "filePath": "src/webview/vrBridge.ts",
+      "location": "src/webview/vrBridge.ts:284:37"
+    },
+    "src/webview/vrBridge.ts:286:25": {
+      "scopeId": "src/webview/vrBridge.ts:286:25",
+      "name": "src/webview/vrBridge.ts:286",
+      "kind": "arrow",
+      "parentScopeId": "src/webview/vrBridge.ts:283:40",
+      "filePath": "src/webview/vrBridge.ts",
+      "location": "src/webview/vrBridge.ts:286:25"
+    },
+    "src/webview/vrBridge.ts:288:25": {
+      "scopeId": "src/webview/vrBridge.ts:288:25",
+      "name": "src/webview/vrBridge.ts:288",
+      "kind": "arrow",
+      "parentScopeId": "src/webview/vrBridge.ts:283:40",
+      "filePath": "src/webview/vrBridge.ts",
+      "location": "src/webview/vrBridge.ts:288:25"
+    },
+    "src/webview/vrBridge.ts:296:37": {
+      "scopeId": "src/webview/vrBridge.ts:296:37",
+      "name": "src/webview/vrBridge.ts:296",
+      "kind": "arrow",
+      "parentScopeId": "src/webview/vrBridge.ts:283:40",
+      "filePath": "src/webview/vrBridge.ts",
+      "location": "src/webview/vrBridge.ts:296:37"
+    },
+    "src/webview/vrBridge.ts:309:2": {
+      "scopeId": "src/webview/vrBridge.ts:309:2",
       "name": "VrBridge.hostAllowed",
       "kind": "method",
       "parentScopeId": "src/webview/vrBridge.ts",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:191:2"
+      "location": "src/webview/vrBridge.ts:309:2"
     },
-    "src/webview/vrBridge.ts:199:2": {
-      "scopeId": "src/webview/vrBridge.ts:199:2",
+    "src/webview/vrBridge.ts:317:2": {
+      "scopeId": "src/webview/vrBridge.ts:317:2",
       "name": "VrBridge.serve",
       "kind": "method",
       "parentScopeId": "src/webview/vrBridge.ts",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:199:2"
+      "location": "src/webview/vrBridge.ts:317:2"
     },
-    "src/webview/vrBridge.ts:200:16": {
-      "scopeId": "src/webview/vrBridge.ts:200:16",
+    "src/webview/vrBridge.ts:318:16": {
+      "scopeId": "src/webview/vrBridge.ts:318:16",
       "name": "send",
       "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:199:2",
+      "parentScopeId": "src/webview/vrBridge.ts:317:2",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:200:16"
+      "location": "src/webview/vrBridge.ts:318:16"
     },
-    "src/webview/vrBridge.ts:229:53": {
-      "scopeId": "src/webview/vrBridge.ts:229:53",
-      "name": "src/webview/vrBridge.ts:229",
+    "src/webview/vrBridge.ts:347:29": {
+      "scopeId": "src/webview/vrBridge.ts:347:29",
+      "name": "src/webview/vrBridge.ts:347",
       "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:199:2",
+      "parentScopeId": "src/webview/vrBridge.ts:317:2",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:229:53"
+      "location": "src/webview/vrBridge.ts:347:29"
     },
-    "src/webview/vrBridge.ts:241:2": {
-      "scopeId": "src/webview/vrBridge.ts:241:2",
+    "src/webview/vrBridge.ts:359:53": {
+      "scopeId": "src/webview/vrBridge.ts:359:53",
+      "name": "src/webview/vrBridge.ts:359",
+      "kind": "arrow",
+      "parentScopeId": "src/webview/vrBridge.ts:317:2",
+      "filePath": "src/webview/vrBridge.ts",
+      "location": "src/webview/vrBridge.ts:359:53"
+    },
+    "src/webview/vrBridge.ts:371:2": {
+      "scopeId": "src/webview/vrBridge.ts:371:2",
       "name": "VrBridge.upgrade",
       "kind": "method",
       "parentScopeId": "src/webview/vrBridge.ts",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:241:2"
+      "location": "src/webview/vrBridge.ts:371:2"
     },
-    "src/webview/vrBridge.ts:254:50": {
-      "scopeId": "src/webview/vrBridge.ts:254:50",
-      "name": "src/webview/vrBridge.ts:254",
+    "src/webview/vrBridge.ts:384:50": {
+      "scopeId": "src/webview/vrBridge.ts:384:50",
+      "name": "src/webview/vrBridge.ts:384",
       "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:241:2",
+      "parentScopeId": "src/webview/vrBridge.ts:371:2",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:254:50"
+      "location": "src/webview/vrBridge.ts:384:50"
     },
-    "src/webview/vrBridge.ts:257:12": {
-      "scopeId": "src/webview/vrBridge.ts:257:12",
+    "src/webview/vrBridge.ts:387:12": {
+      "scopeId": "src/webview/vrBridge.ts:387:12",
       "name": "post",
       "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:254:50",
+      "parentScopeId": "src/webview/vrBridge.ts:384:50",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:257:12"
+      "location": "src/webview/vrBridge.ts:387:12"
     },
-    "src/webview/vrBridge.ts:263:25": {
-      "scopeId": "src/webview/vrBridge.ts:263:25",
-      "name": "src/webview/vrBridge.ts:263",
+    "src/webview/vrBridge.ts:393:25": {
+      "scopeId": "src/webview/vrBridge.ts:393:25",
+      "name": "src/webview/vrBridge.ts:393",
       "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:254:50",
+      "parentScopeId": "src/webview/vrBridge.ts:384:50",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:263:25"
+      "location": "src/webview/vrBridge.ts:393:25"
     },
-    "src/webview/vrBridge.ts:273:23": {
-      "scopeId": "src/webview/vrBridge.ts:273:23",
-      "name": "src/webview/vrBridge.ts:273",
+    "src/webview/vrBridge.ts:403:23": {
+      "scopeId": "src/webview/vrBridge.ts:403:23",
+      "name": "src/webview/vrBridge.ts:403",
       "kind": "arrow",
-      "parentScopeId": "src/webview/vrBridge.ts:254:50",
+      "parentScopeId": "src/webview/vrBridge.ts:384:50",
       "filePath": "src/webview/vrBridge.ts",
-      "location": "src/webview/vrBridge.ts:273:23"
+      "location": "src/webview/vrBridge.ts:403:23"
     },
     "src/webview/panel.ts": {
       "scopeId": "src/webview/panel.ts",
@@ -2557,141 +2605,141 @@
       "filePath": "src/webview/panel.ts",
       "location": "src/webview/panel.ts:668:2"
     },
-    "src/webview/panel.ts:676:18": {
-      "scopeId": "src/webview/panel.ts:676:18",
-      "name": "pageHtml",
-      "kind": "arrow",
-      "parentScopeId": "src/webview/panel.ts:668:2",
-      "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:676:18"
-    },
     "src/webview/panel.ts:677:18": {
       "scopeId": "src/webview/panel.ts:677:18",
-      "name": "onMessage",
+      "name": "pageHtml",
       "kind": "arrow",
       "parentScopeId": "src/webview/panel.ts:668:2",
       "filePath": "src/webview/panel.ts",
       "location": "src/webview/panel.ts:677:18"
     },
-    "src/webview/panel.ts:703:2": {
-      "scopeId": "src/webview/panel.ts:703:2",
+    "src/webview/panel.ts:678:18": {
+      "scopeId": "src/webview/panel.ts:678:18",
+      "name": "onMessage",
+      "kind": "arrow",
+      "parentScopeId": "src/webview/panel.ts:668:2",
+      "filePath": "src/webview/panel.ts",
+      "location": "src/webview/panel.ts:678:18"
+    },
+    "src/webview/panel.ts:712:2": {
+      "scopeId": "src/webview/panel.ts:712:2",
       "name": "GraphPanel.getLayoutFilePath",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:703:2"
+      "location": "src/webview/panel.ts:712:2"
     },
-    "src/webview/panel.ts:708:2": {
-      "scopeId": "src/webview/panel.ts:708:2",
+    "src/webview/panel.ts:717:2": {
+      "scopeId": "src/webview/panel.ts:717:2",
       "name": "GraphPanel.readSavedLayout",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:708:2"
+      "location": "src/webview/panel.ts:717:2"
     },
-    "src/webview/panel.ts:735:2": {
-      "scopeId": "src/webview/panel.ts:735:2",
+    "src/webview/panel.ts:744:2": {
+      "scopeId": "src/webview/panel.ts:744:2",
       "name": "GraphPanel.handleSaveLayout",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:735:2"
+      "location": "src/webview/panel.ts:744:2"
     },
-    "src/webview/panel.ts:756:2": {
-      "scopeId": "src/webview/panel.ts:756:2",
+    "src/webview/panel.ts:765:2": {
+      "scopeId": "src/webview/panel.ts:765:2",
       "name": "GraphPanel.handleExportHtml",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:756:2"
+      "location": "src/webview/panel.ts:765:2"
     },
-    "src/webview/panel.ts:782:2": {
-      "scopeId": "src/webview/panel.ts:782:2",
+    "src/webview/panel.ts:791:2": {
+      "scopeId": "src/webview/panel.ts:791:2",
       "name": "GraphPanel.noteFocus",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:782:2"
+      "location": "src/webview/panel.ts:791:2"
     },
-    "src/webview/panel.ts:785:35": {
-      "scopeId": "src/webview/panel.ts:785:35",
-      "name": "src/webview/panel.ts:785",
+    "src/webview/panel.ts:794:35": {
+      "scopeId": "src/webview/panel.ts:794:35",
+      "name": "src/webview/panel.ts:794",
       "kind": "arrow",
-      "parentScopeId": "src/webview/panel.ts:782:2",
+      "parentScopeId": "src/webview/panel.ts:791:2",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:785:35"
+      "location": "src/webview/panel.ts:794:35"
     },
-    "src/webview/panel.ts:800:2": {
-      "scopeId": "src/webview/panel.ts:800:2",
+    "src/webview/panel.ts:809:2": {
+      "scopeId": "src/webview/panel.ts:809:2",
       "name": "GraphPanel.noteViewState",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:800:2"
+      "location": "src/webview/panel.ts:809:2"
     },
-    "src/webview/panel.ts:824:2": {
-      "scopeId": "src/webview/panel.ts:824:2",
+    "src/webview/panel.ts:833:2": {
+      "scopeId": "src/webview/panel.ts:833:2",
       "name": "GraphPanel.handleGoToDefinition",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:824:2"
+      "location": "src/webview/panel.ts:833:2"
     },
-    "src/webview/panel.ts:846:2": {
-      "scopeId": "src/webview/panel.ts:846:2",
+    "src/webview/panel.ts:855:2": {
+      "scopeId": "src/webview/panel.ts:855:2",
       "name": "GraphPanel.buildExportSkeleton",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:846:2"
-    },
-    "src/webview/panel.ts:869:2": {
-      "scopeId": "src/webview/panel.ts:869:2",
-      "name": "GraphPanel.configScript",
-      "kind": "method",
-      "parentScopeId": "src/webview/panel.ts",
-      "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:869:2"
+      "location": "src/webview/panel.ts:855:2"
     },
     "src/webview/panel.ts:878:2": {
       "scopeId": "src/webview/panel.ts:878:2",
-      "name": "GraphPanel.getWebviewContent",
+      "name": "GraphPanel.configScript",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
       "location": "src/webview/panel.ts:878:2"
     },
-    "src/webview/panel.ts:899:79": {
-      "scopeId": "src/webview/panel.ts:899:79",
-      "name": "src/webview/panel.ts:899",
-      "kind": "arrow",
-      "parentScopeId": "src/webview/panel.ts:878:2",
+    "src/webview/panel.ts:887:2": {
+      "scopeId": "src/webview/panel.ts:887:2",
+      "name": "GraphPanel.getWebviewContent",
+      "kind": "method",
+      "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:899:79"
+      "location": "src/webview/panel.ts:887:2"
     },
-    "src/webview/panel.ts:907:2": {
-      "scopeId": "src/webview/panel.ts:907:2",
+    "src/webview/panel.ts:909:79": {
+      "scopeId": "src/webview/panel.ts:909:79",
+      "name": "src/webview/panel.ts:909",
+      "kind": "arrow",
+      "parentScopeId": "src/webview/panel.ts:887:2",
+      "filePath": "src/webview/panel.ts",
+      "location": "src/webview/panel.ts:909:79"
+    },
+    "src/webview/panel.ts:917:2": {
+      "scopeId": "src/webview/panel.ts:917:2",
       "name": "GraphPanel.getVrPageContent",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:907:2"
+      "location": "src/webview/panel.ts:917:2"
     },
-    "src/webview/panel.ts:919:2": {
-      "scopeId": "src/webview/panel.ts:919:2",
+    "src/webview/panel.ts:936:2": {
+      "scopeId": "src/webview/panel.ts:936:2",
       "name": "GraphPanel.pageHtml",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:919:2"
+      "location": "src/webview/panel.ts:936:2"
     },
-    "src/webview/panel.ts:980:2": {
-      "scopeId": "src/webview/panel.ts:980:2",
+    "src/webview/panel.ts:1003:2": {
+      "scopeId": "src/webview/panel.ts:1003:2",
       "name": "GraphPanel.dispose",
       "kind": "method",
       "parentScopeId": "src/webview/panel.ts",
       "filePath": "src/webview/panel.ts",
-      "location": "src/webview/panel.ts:980:2"
+      "location": "src/webview/panel.ts:1003:2"
     },
     "src/strategy/server.ts": {
       "scopeId": "src/strategy/server.ts",
@@ -3937,141 +3985,157 @@
       "filePath": "src/extension.ts",
       "location": "src/extension.ts:527:18"
     },
-    "src/extension.ts:551:3": {
-      "scopeId": "src/extension.ts:551:3",
-      "name": "src/extension.ts:551",
+    "src/extension.ts:554:19": {
+      "scopeId": "src/extension.ts:554:19",
+      "name": "port",
       "kind": "arrow",
       "parentScopeId": "src/extension.ts:69:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:551:3"
+      "location": "src/extension.ts:554:19"
     },
-    "src/extension.ts:556:66": {
-      "scopeId": "src/extension.ts:556:66",
-      "name": "src/extension.ts:556",
+    "src/extension.ts:555:19": {
+      "scopeId": "src/extension.ts:555:19",
+      "name": "log",
       "kind": "arrow",
       "parentScopeId": "src/extension.ts:69:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:556:66"
+      "location": "src/extension.ts:555:19"
     },
-    "src/extension.ts:564:65": {
-      "scopeId": "src/extension.ts:564:65",
-      "name": "src/extension.ts:564",
+    "src/extension.ts:560:45": {
+      "scopeId": "src/extension.ts:560:45",
+      "name": "src/extension.ts:560",
       "kind": "arrow",
       "parentScopeId": "src/extension.ts:69:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:564:65"
+      "location": "src/extension.ts:560:45"
     },
-    "src/extension.ts:569:67": {
-      "scopeId": "src/extension.ts:569:67",
-      "name": "src/extension.ts:569",
+    "src/extension.ts:567:66": {
+      "scopeId": "src/extension.ts:567:66",
+      "name": "src/extension.ts:567",
       "kind": "arrow",
       "parentScopeId": "src/extension.ts:69:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:569:67"
+      "location": "src/extension.ts:567:66"
     },
-    "src/extension.ts:585:27": {
-      "scopeId": "src/extension.ts:585:27",
+    "src/extension.ts:575:65": {
+      "scopeId": "src/extension.ts:575:65",
+      "name": "src/extension.ts:575",
+      "kind": "arrow",
+      "parentScopeId": "src/extension.ts:69:1",
+      "filePath": "src/extension.ts",
+      "location": "src/extension.ts:575:65"
+    },
+    "src/extension.ts:580:67": {
+      "scopeId": "src/extension.ts:580:67",
+      "name": "src/extension.ts:580",
+      "kind": "arrow",
+      "parentScopeId": "src/extension.ts:69:1",
+      "filePath": "src/extension.ts",
+      "location": "src/extension.ts:580:67"
+    },
+    "src/extension.ts:596:27": {
+      "scopeId": "src/extension.ts:596:27",
       "name": "activateTreeItem",
       "kind": "arrow",
       "parentScopeId": "src/extension.ts:69:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:585:27"
+      "location": "src/extension.ts:596:27"
     },
-    "src/extension.ts:633:31": {
-      "scopeId": "src/extension.ts:633:31",
+    "src/extension.ts:644:31": {
+      "scopeId": "src/extension.ts:644:31",
       "name": "activateTreeItemOnce",
       "kind": "arrow",
       "parentScopeId": "src/extension.ts:69:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:633:31"
+      "location": "src/extension.ts:644:31"
     },
-    "src/extension.ts:644:32": {
-      "scopeId": "src/extension.ts:644:32",
-      "name": "src/extension.ts:644",
+    "src/extension.ts:655:32": {
+      "scopeId": "src/extension.ts:655:32",
+      "name": "src/extension.ts:655",
       "kind": "arrow",
       "parentScopeId": "src/extension.ts:69:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:644:32"
+      "location": "src/extension.ts:655:32"
     },
-    "src/extension.ts:658:66": {
-      "scopeId": "src/extension.ts:658:66",
-      "name": "src/extension.ts:658",
+    "src/extension.ts:669:66": {
+      "scopeId": "src/extension.ts:669:66",
+      "name": "src/extension.ts:669",
       "kind": "arrow",
       "parentScopeId": "src/extension.ts:69:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:658:66"
+      "location": "src/extension.ts:669:66"
     },
-    "src/extension.ts:679:54": {
-      "scopeId": "src/extension.ts:679:54",
-      "name": "src/extension.ts:679",
+    "src/extension.ts:690:54": {
+      "scopeId": "src/extension.ts:690:54",
+      "name": "src/extension.ts:690",
       "kind": "arrow",
       "parentScopeId": "src/extension.ts:69:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:679:54"
+      "location": "src/extension.ts:690:54"
     },
-    "src/extension.ts:703:12": {
-      "scopeId": "src/extension.ts:703:12",
-      "name": "src/extension.ts:703",
+    "src/extension.ts:714:12": {
+      "scopeId": "src/extension.ts:714:12",
+      "name": "src/extension.ts:714",
       "kind": "arrow",
       "parentScopeId": "src/extension.ts:69:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:703:12"
+      "location": "src/extension.ts:714:12"
     },
-    "src/extension.ts:727:25": {
-      "scopeId": "src/extension.ts:727:25",
+    "src/extension.ts:738:25": {
+      "scopeId": "src/extension.ts:738:25",
       "name": "onTacticaEvent",
       "kind": "arrow",
       "parentScopeId": "src/extension.ts:69:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:727:25"
+      "location": "src/extension.ts:738:25"
     },
-    "src/extension.ts:732:37": {
-      "scopeId": "src/extension.ts:732:37",
-      "name": "src/extension.ts:732",
+    "src/extension.ts:743:37": {
+      "scopeId": "src/extension.ts:743:37",
+      "name": "src/extension.ts:743",
       "kind": "arrow",
-      "parentScopeId": "src/extension.ts:727:25",
+      "parentScopeId": "src/extension.ts:738:25",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:732:37"
+      "location": "src/extension.ts:743:37"
     },
-    "src/extension.ts:765:1": {
-      "scopeId": "src/extension.ts:765:1",
+    "src/extension.ts:776:1": {
+      "scopeId": "src/extension.ts:776:1",
       "name": "discoverTacticaSources",
       "kind": "function",
       "parentScopeId": "src/extension.ts",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:765:1"
+      "location": "src/extension.ts:776:1"
     },
-    "src/extension.ts:771:34": {
-      "scopeId": "src/extension.ts:771:34",
-      "name": "src/extension.ts:771",
+    "src/extension.ts:782:34": {
+      "scopeId": "src/extension.ts:782:34",
+      "name": "src/extension.ts:782",
       "kind": "arrow",
-      "parentScopeId": "src/extension.ts:765:1",
+      "parentScopeId": "src/extension.ts:776:1",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:771:34"
+      "location": "src/extension.ts:782:34"
     },
-    "src/extension.ts:775:1": {
-      "scopeId": "src/extension.ts:775:1",
+    "src/extension.ts:786:1": {
+      "scopeId": "src/extension.ts:786:1",
       "name": "refreshTypeGraph",
       "kind": "function",
       "parentScopeId": "src/extension.ts",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:775:1"
+      "location": "src/extension.ts:786:1"
     },
-    "src/extension.ts:823:1": {
-      "scopeId": "src/extension.ts:823:1",
+    "src/extension.ts:834:1": {
+      "scopeId": "src/extension.ts:834:1",
       "name": "flushTacticaChanges",
       "kind": "function",
       "parentScopeId": "src/extension.ts",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:823:1"
+      "location": "src/extension.ts:834:1"
     },
-    "src/extension.ts:836:1": {
-      "scopeId": "src/extension.ts:836:1",
+    "src/extension.ts:847:1": {
+      "scopeId": "src/extension.ts:847:1",
       "name": "deactivate",
       "kind": "function",
       "parentScopeId": "src/extension.ts",
       "filePath": "src/extension.ts",
-      "location": "src/extension.ts:836:1"
+      "location": "src/extension.ts:847:1"
     },
     "src/models/Definition.ts": {
       "scopeId": "src/models/Definition.ts",
@@ -12001,9 +12065,18 @@
       "reassignments": []
     },
     {
+      "name": "VR_LIBRARIES",
+      "scopeId": "src/webview/vrBridge.ts",
+      "declaration": "src/webview/vrBridge.ts:58:14",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": [],
+      "inferredType": "vrLibrary[]"
+    },
+    {
       "name": "MEDIA_TYPES",
       "scopeId": "src/webview/vrBridge.ts",
-      "declaration": "src/webview/vrBridge.ts:45:7",
+      "declaration": "src/webview/vrBridge.ts:85:7",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -12012,7 +12085,7 @@
     {
       "name": "VR_SESSION_CLOSED",
       "scopeId": "src/webview/vrBridge.ts",
-      "declaration": "src/webview/vrBridge.ts:52:14",
+      "declaration": "src/webview/vrBridge.ts:92:14",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -12021,34 +12094,25 @@
     {
       "name": "VR_PAGE_BOOT",
       "scopeId": "src/webview/vrBridge.ts",
-      "declaration": "src/webview/vrBridge.ts:62:14",
+      "declaration": "src/webview/vrBridge.ts:102:14",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
       "inferredType": "string"
     },
     {
-      "name": "mediaRoot",
-      "scopeId": "src/webview/vrBridge.ts:108:2",
-      "declaration": "src/webview/vrBridge.ts:109:20",
+      "name": "options",
+      "scopeId": "src/webview/vrBridge.ts:153:2",
+      "declaration": "src/webview/vrBridge.ts:153:32",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
-      "inferredType": "string"
-    },
-    {
-      "name": "log",
-      "scopeId": "src/webview/vrBridge.ts:108:2",
-      "declaration": "src/webview/vrBridge.ts:110:20",
-      "isParameter": true,
-      "isMutable": true,
-      "reassignments": [],
-      "inferredType": "(message: string) => void"
+      "inferredType": "VrBridgeOptions"
     },
     {
       "name": "host",
-      "scopeId": "src/webview/vrBridge.ts:117:2",
-      "declaration": "src/webview/vrBridge.ts:117:14",
+      "scopeId": "src/webview/vrBridge.ts:165:2",
+      "declaration": "src/webview/vrBridge.ts:165:14",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12056,32 +12120,66 @@
     },
     {
       "name": "port",
-      "scopeId": "src/webview/vrBridge.ts:117:2",
-      "declaration": "src/webview/vrBridge.ts:118:9",
+      "scopeId": "src/webview/vrBridge.ts:165:2",
+      "declaration": "src/webview/vrBridge.ts:166:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "token",
-      "scopeId": "src/webview/vrBridge.ts:117:2",
-      "declaration": "src/webview/vrBridge.ts:119:9",
+      "scopeId": "src/webview/vrBridge.ts:165:2",
+      "declaration": "src/webview/vrBridge.ts:168:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "opened",
-      "scopeId": "src/webview/vrBridge.ts:117:2",
-      "declaration": "src/webview/vrBridge.ts:121:9",
+      "scopeId": "src/webview/vrBridge.ts:165:2",
+      "declaration": "src/webview/vrBridge.ts:170:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "token",
-      "scopeId": "src/webview/vrBridge.ts:126:2",
-      "declaration": "src/webview/vrBridge.ts:126:13",
+      "scopeId": "src/webview/vrBridge.ts:174:2",
+      "declaration": "src/webview/vrBridge.ts:174:7",
+      "isParameter": true,
+      "isMutable": true,
+      "reassignments": [],
+      "inferredType": "string"
+    },
+    {
+      "name": "open",
+      "scopeId": "src/webview/vrBridge.ts:174:2",
+      "declaration": "src/webview/vrBridge.ts:175:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "name",
+      "scopeId": "src/webview/vrBridge.ts:181:2",
+      "declaration": "src/webview/vrBridge.ts:181:14",
+      "isParameter": true,
+      "isMutable": true,
+      "reassignments": [],
+      "inferredType": "string"
+    },
+    {
+      "name": "url",
+      "scopeId": "src/webview/vrBridge.ts:181:2",
+      "declaration": "src/webview/vrBridge.ts:182:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "token",
+      "scopeId": "src/webview/vrBridge.ts:187:2",
+      "declaration": "src/webview/vrBridge.ts:187:13",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12089,8 +12187,8 @@
     },
     {
       "name": "message",
-      "scopeId": "src/webview/vrBridge.ts:126:2",
-      "declaration": "src/webview/vrBridge.ts:126:28",
+      "scopeId": "src/webview/vrBridge.ts:187:2",
+      "declaration": "src/webview/vrBridge.ts:187:28",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12098,32 +12196,32 @@
     },
     {
       "name": "session",
-      "scopeId": "src/webview/vrBridge.ts:126:2",
-      "declaration": "src/webview/vrBridge.ts:127:9",
+      "scopeId": "src/webview/vrBridge.ts:187:2",
+      "declaration": "src/webview/vrBridge.ts:188:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "text",
-      "scopeId": "src/webview/vrBridge.ts:126:2",
-      "declaration": "src/webview/vrBridge.ts:131:9",
+      "scopeId": "src/webview/vrBridge.ts:187:2",
+      "declaration": "src/webview/vrBridge.ts:192:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "socket",
-      "scopeId": "src/webview/vrBridge.ts:126:2",
-      "declaration": "src/webview/vrBridge.ts:132:14",
+      "scopeId": "src/webview/vrBridge.ts:187:2",
+      "declaration": "src/webview/vrBridge.ts:193:14",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "token",
-      "scopeId": "src/webview/vrBridge.ts:139:2",
-      "declaration": "src/webview/vrBridge.ts:139:9",
+      "scopeId": "src/webview/vrBridge.ts:200:2",
+      "declaration": "src/webview/vrBridge.ts:200:9",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12131,96 +12229,219 @@
     },
     {
       "name": "session",
-      "scopeId": "src/webview/vrBridge.ts:139:2",
-      "declaration": "src/webview/vrBridge.ts:140:9",
+      "scopeId": "src/webview/vrBridge.ts:200:2",
+      "declaration": "src/webview/vrBridge.ts:201:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "socket",
-      "scopeId": "src/webview/vrBridge.ts:139:2",
-      "declaration": "src/webview/vrBridge.ts:145:14",
+      "scopeId": "src/webview/vrBridge.ts:200:2",
+      "declaration": "src/webview/vrBridge.ts:206:14",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "token",
-      "scopeId": "src/webview/vrBridge.ts:150:2",
-      "declaration": "src/webview/vrBridge.ts:151:14",
+      "scopeId": "src/webview/vrBridge.ts:211:2",
+      "declaration": "src/webview/vrBridge.ts:212:14",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "cacheDir",
+      "scopeId": "src/webview/vrBridge.ts:228:2",
+      "declaration": "src/webview/vrBridge.ts:229:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "library",
+      "scopeId": "src/webview/vrBridge.ts:228:2",
+      "declaration": "src/webview/vrBridge.ts:230:14",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "candidates",
+      "scopeId": "src/webview/vrBridge.ts:228:2",
+      "declaration": "src/webview/vrBridge.ts:234:10",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": [],
+      "inferredType": "Array<unknown>"
+    },
+    {
+      "name": "local",
+      "scopeId": "src/webview/vrBridge.ts:228:2",
+      "declaration": "src/webview/vrBridge.ts:238:10",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "file",
+      "scopeId": "src/webview/vrBridge.ts:238:34",
+      "declaration": "src/webview/vrBridge.ts:238:34",
+      "isParameter": true,
+      "isMutable": true,
+      "reassignments": []
+    },
+    {
+      "name": "response",
+      "scopeId": "src/webview/vrBridge.ts:228:2",
+      "declaration": "src/webview/vrBridge.ts:247:11",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "body",
+      "scopeId": "src/webview/vrBridge.ts:228:2",
+      "declaration": "src/webview/vrBridge.ts:251:11",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "sha256",
+      "scopeId": "src/webview/vrBridge.ts:228:2",
+      "declaration": "src/webview/vrBridge.ts:252:11",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "target",
+      "scopeId": "src/webview/vrBridge.ts:228:2",
+      "declaration": "src/webview/vrBridge.ts:256:11",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "file",
+      "scopeId": "src/webview/vrBridge.ts:268:2",
+      "declaration": "src/webview/vrBridge.ts:268:27",
+      "isParameter": true,
+      "isMutable": true,
+      "reassignments": [],
+      "inferredType": "string"
+    },
+    {
+      "name": "sha256",
+      "scopeId": "src/webview/vrBridge.ts:268:2",
+      "declaration": "src/webview/vrBridge.ts:268:41",
+      "isParameter": true,
+      "isMutable": true,
+      "reassignments": [],
+      "inferredType": "string"
+    },
+    {
+      "name": "actual",
+      "scopeId": "src/webview/vrBridge.ts:268:2",
+      "declaration": "src/webview/vrBridge.ts:272:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "matches",
+      "scopeId": "src/webview/vrBridge.ts:268:2",
+      "declaration": "src/webview/vrBridge.ts:273:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "configured",
+      "scopeId": "src/webview/vrBridge.ts:277:2",
+      "declaration": "src/webview/vrBridge.ts:281:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "port",
+      "scopeId": "src/webview/vrBridge.ts:277:2",
+      "declaration": "src/webview/vrBridge.ts:282:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "resolve",
-      "scopeId": "src/webview/vrBridge.ts:169:40",
-      "declaration": "src/webview/vrBridge.ts:169:41",
+      "scopeId": "src/webview/vrBridge.ts:283:40",
+      "declaration": "src/webview/vrBridge.ts:283:41",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "reject",
-      "scopeId": "src/webview/vrBridge.ts:169:40",
-      "declaration": "src/webview/vrBridge.ts:169:50",
+      "scopeId": "src/webview/vrBridge.ts:283:40",
+      "declaration": "src/webview/vrBridge.ts:283:50",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "server",
-      "scopeId": "src/webview/vrBridge.ts:169:40",
-      "declaration": "src/webview/vrBridge.ts:170:10",
+      "scopeId": "src/webview/vrBridge.ts:283:40",
+      "declaration": "src/webview/vrBridge.ts:284:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "req",
-      "scopeId": "src/webview/vrBridge.ts:170:37",
-      "declaration": "src/webview/vrBridge.ts:170:38",
+      "scopeId": "src/webview/vrBridge.ts:284:37",
+      "declaration": "src/webview/vrBridge.ts:284:38",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "res",
-      "scopeId": "src/webview/vrBridge.ts:170:37",
-      "declaration": "src/webview/vrBridge.ts:170:43",
+      "scopeId": "src/webview/vrBridge.ts:284:37",
+      "declaration": "src/webview/vrBridge.ts:284:43",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "req",
-      "scopeId": "src/webview/vrBridge.ts:172:25",
-      "declaration": "src/webview/vrBridge.ts:172:26",
+      "scopeId": "src/webview/vrBridge.ts:286:25",
+      "declaration": "src/webview/vrBridge.ts:286:26",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "socket",
-      "scopeId": "src/webview/vrBridge.ts:172:25",
-      "declaration": "src/webview/vrBridge.ts:172:31",
+      "scopeId": "src/webview/vrBridge.ts:286:25",
+      "declaration": "src/webview/vrBridge.ts:286:31",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "head",
-      "scopeId": "src/webview/vrBridge.ts:172:25",
-      "declaration": "src/webview/vrBridge.ts:172:39",
+      "scopeId": "src/webview/vrBridge.ts:286:25",
+      "declaration": "src/webview/vrBridge.ts:286:39",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "err",
-      "scopeId": "src/webview/vrBridge.ts:173:25",
-      "declaration": "src/webview/vrBridge.ts:173:26",
+      "scopeId": "src/webview/vrBridge.ts:288:25",
+      "declaration": "src/webview/vrBridge.ts:288:26",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12228,24 +12449,24 @@
     },
     {
       "name": "address",
-      "scopeId": "src/webview/vrBridge.ts:178:34",
-      "declaration": "src/webview/vrBridge.ts:179:11",
+      "scopeId": "src/webview/vrBridge.ts:296:37",
+      "declaration": "src/webview/vrBridge.ts:297:11",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "port",
-      "scopeId": "src/webview/vrBridge.ts:178:34",
-      "declaration": "src/webview/vrBridge.ts:180:11",
+      "scopeId": "src/webview/vrBridge.ts:296:37",
+      "declaration": "src/webview/vrBridge.ts:298:11",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "req",
-      "scopeId": "src/webview/vrBridge.ts:191:2",
-      "declaration": "src/webview/vrBridge.ts:191:23",
+      "scopeId": "src/webview/vrBridge.ts:309:2",
+      "declaration": "src/webview/vrBridge.ts:309:23",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12253,40 +12474,40 @@
     },
     {
       "name": "address",
-      "scopeId": "src/webview/vrBridge.ts:191:2",
-      "declaration": "src/webview/vrBridge.ts:192:9",
+      "scopeId": "src/webview/vrBridge.ts:309:2",
+      "declaration": "src/webview/vrBridge.ts:310:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "port",
-      "scopeId": "src/webview/vrBridge.ts:191:2",
-      "declaration": "src/webview/vrBridge.ts:193:9",
+      "scopeId": "src/webview/vrBridge.ts:309:2",
+      "declaration": "src/webview/vrBridge.ts:311:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "host",
-      "scopeId": "src/webview/vrBridge.ts:191:2",
-      "declaration": "src/webview/vrBridge.ts:194:9",
+      "scopeId": "src/webview/vrBridge.ts:309:2",
+      "declaration": "src/webview/vrBridge.ts:312:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "allowed",
-      "scopeId": "src/webview/vrBridge.ts:191:2",
-      "declaration": "src/webview/vrBridge.ts:195:9",
+      "scopeId": "src/webview/vrBridge.ts:309:2",
+      "declaration": "src/webview/vrBridge.ts:313:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "req",
-      "scopeId": "src/webview/vrBridge.ts:199:2",
-      "declaration": "src/webview/vrBridge.ts:199:17",
+      "scopeId": "src/webview/vrBridge.ts:317:2",
+      "declaration": "src/webview/vrBridge.ts:317:17",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12294,8 +12515,8 @@
     },
     {
       "name": "res",
-      "scopeId": "src/webview/vrBridge.ts:199:2",
-      "declaration": "src/webview/vrBridge.ts:199:44",
+      "scopeId": "src/webview/vrBridge.ts:317:2",
+      "declaration": "src/webview/vrBridge.ts:317:44",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12303,8 +12524,8 @@
     },
     {
       "name": "send",
-      "scopeId": "src/webview/vrBridge.ts:199:2",
-      "declaration": "src/webview/vrBridge.ts:200:9",
+      "scopeId": "src/webview/vrBridge.ts:317:2",
+      "declaration": "src/webview/vrBridge.ts:318:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -12312,8 +12533,8 @@
     },
     {
       "name": "status",
-      "scopeId": "src/webview/vrBridge.ts:200:16",
-      "declaration": "src/webview/vrBridge.ts:200:17",
+      "scopeId": "src/webview/vrBridge.ts:318:16",
+      "declaration": "src/webview/vrBridge.ts:318:17",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12321,8 +12542,8 @@
     },
     {
       "name": "type",
-      "scopeId": "src/webview/vrBridge.ts:200:16",
-      "declaration": "src/webview/vrBridge.ts:200:33",
+      "scopeId": "src/webview/vrBridge.ts:318:16",
+      "declaration": "src/webview/vrBridge.ts:318:33",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12330,8 +12551,8 @@
     },
     {
       "name": "body",
-      "scopeId": "src/webview/vrBridge.ts:200:16",
-      "declaration": "src/webview/vrBridge.ts:200:47",
+      "scopeId": "src/webview/vrBridge.ts:318:16",
+      "declaration": "src/webview/vrBridge.ts:318:47",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12339,64 +12560,96 @@
     },
     {
       "name": "pathname",
-      "scopeId": "src/webview/vrBridge.ts:199:2",
-      "declaration": "src/webview/vrBridge.ts:215:9",
+      "scopeId": "src/webview/vrBridge.ts:317:2",
+      "declaration": "src/webview/vrBridge.ts:333:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "page",
-      "scopeId": "src/webview/vrBridge.ts:199:2",
-      "declaration": "src/webview/vrBridge.ts:216:9",
+      "scopeId": "src/webview/vrBridge.ts:317:2",
+      "declaration": "src/webview/vrBridge.ts:334:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "session",
-      "scopeId": "src/webview/vrBridge.ts:199:2",
-      "declaration": "src/webview/vrBridge.ts:218:10",
+      "scopeId": "src/webview/vrBridge.ts:317:2",
+      "declaration": "src/webview/vrBridge.ts:336:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
-      "name": "media",
-      "scopeId": "src/webview/vrBridge.ts:199:2",
-      "declaration": "src/webview/vrBridge.ts:226:9",
+      "name": "library",
+      "scopeId": "src/webview/vrBridge.ts:317:2",
+      "declaration": "src/webview/vrBridge.ts:344:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
-      "name": "mediaType",
-      "scopeId": "src/webview/vrBridge.ts:199:2",
-      "declaration": "src/webview/vrBridge.ts:227:9",
+      "name": "libraryFile",
+      "scopeId": "src/webview/vrBridge.ts:317:2",
+      "declaration": "src/webview/vrBridge.ts:345:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "err",
-      "scopeId": "src/webview/vrBridge.ts:229:53",
-      "declaration": "src/webview/vrBridge.ts:229:54",
+      "scopeId": "src/webview/vrBridge.ts:347:29",
+      "declaration": "src/webview/vrBridge.ts:347:30",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "body",
-      "scopeId": "src/webview/vrBridge.ts:229:53",
-      "declaration": "src/webview/vrBridge.ts:229:59",
+      "scopeId": "src/webview/vrBridge.ts:347:29",
+      "declaration": "src/webview/vrBridge.ts:347:35",
+      "isParameter": true,
+      "isMutable": true,
+      "reassignments": []
+    },
+    {
+      "name": "media",
+      "scopeId": "src/webview/vrBridge.ts:317:2",
+      "declaration": "src/webview/vrBridge.ts:356:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "mediaType",
+      "scopeId": "src/webview/vrBridge.ts:317:2",
+      "declaration": "src/webview/vrBridge.ts:357:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "err",
+      "scopeId": "src/webview/vrBridge.ts:359:53",
+      "declaration": "src/webview/vrBridge.ts:359:54",
+      "isParameter": true,
+      "isMutable": true,
+      "reassignments": []
+    },
+    {
+      "name": "body",
+      "scopeId": "src/webview/vrBridge.ts:359:53",
+      "declaration": "src/webview/vrBridge.ts:359:59",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "req",
-      "scopeId": "src/webview/vrBridge.ts:241:2",
-      "declaration": "src/webview/vrBridge.ts:241:19",
+      "scopeId": "src/webview/vrBridge.ts:371:2",
+      "declaration": "src/webview/vrBridge.ts:371:19",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12404,8 +12657,8 @@
     },
     {
       "name": "socket",
-      "scopeId": "src/webview/vrBridge.ts:241:2",
-      "declaration": "src/webview/vrBridge.ts:241:46",
+      "scopeId": "src/webview/vrBridge.ts:371:2",
+      "declaration": "src/webview/vrBridge.ts:371:46",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12413,8 +12666,8 @@
     },
     {
       "name": "head",
-      "scopeId": "src/webview/vrBridge.ts:241:2",
-      "declaration": "src/webview/vrBridge.ts:241:62",
+      "scopeId": "src/webview/vrBridge.ts:371:2",
+      "declaration": "src/webview/vrBridge.ts:371:62",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12422,64 +12675,64 @@
     },
     {
       "name": "address",
-      "scopeId": "src/webview/vrBridge.ts:241:2",
-      "declaration": "src/webview/vrBridge.ts:242:9",
+      "scopeId": "src/webview/vrBridge.ts:371:2",
+      "declaration": "src/webview/vrBridge.ts:372:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "port",
-      "scopeId": "src/webview/vrBridge.ts:241:2",
-      "declaration": "src/webview/vrBridge.ts:243:9",
+      "scopeId": "src/webview/vrBridge.ts:371:2",
+      "declaration": "src/webview/vrBridge.ts:373:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "origin",
-      "scopeId": "src/webview/vrBridge.ts:241:2",
-      "declaration": "src/webview/vrBridge.ts:244:9",
+      "scopeId": "src/webview/vrBridge.ts:371:2",
+      "declaration": "src/webview/vrBridge.ts:374:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "originAllowed",
-      "scopeId": "src/webview/vrBridge.ts:241:2",
-      "declaration": "src/webview/vrBridge.ts:245:9",
+      "scopeId": "src/webview/vrBridge.ts:371:2",
+      "declaration": "src/webview/vrBridge.ts:375:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "pathname",
-      "scopeId": "src/webview/vrBridge.ts:241:2",
-      "declaration": "src/webview/vrBridge.ts:246:9",
+      "scopeId": "src/webview/vrBridge.ts:371:2",
+      "declaration": "src/webview/vrBridge.ts:376:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "match",
-      "scopeId": "src/webview/vrBridge.ts:241:2",
-      "declaration": "src/webview/vrBridge.ts:247:9",
+      "scopeId": "src/webview/vrBridge.ts:371:2",
+      "declaration": "src/webview/vrBridge.ts:377:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "session",
-      "scopeId": "src/webview/vrBridge.ts:241:2",
-      "declaration": "src/webview/vrBridge.ts:248:9",
+      "scopeId": "src/webview/vrBridge.ts:371:2",
+      "declaration": "src/webview/vrBridge.ts:378:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "client",
-      "scopeId": "src/webview/vrBridge.ts:254:50",
-      "declaration": "src/webview/vrBridge.ts:254:51",
+      "scopeId": "src/webview/vrBridge.ts:384:50",
+      "declaration": "src/webview/vrBridge.ts:384:51",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12487,8 +12740,8 @@
     },
     {
       "name": "handle",
-      "scopeId": "src/webview/vrBridge.ts:254:50",
-      "declaration": "src/webview/vrBridge.ts:256:10",
+      "scopeId": "src/webview/vrBridge.ts:384:50",
+      "declaration": "src/webview/vrBridge.ts:386:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -12496,8 +12749,8 @@
     },
     {
       "name": "message",
-      "scopeId": "src/webview/vrBridge.ts:257:12",
-      "declaration": "src/webview/vrBridge.ts:257:13",
+      "scopeId": "src/webview/vrBridge.ts:387:12",
+      "declaration": "src/webview/vrBridge.ts:387:13",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12505,8 +12758,8 @@
     },
     {
       "name": "data",
-      "scopeId": "src/webview/vrBridge.ts:263:25",
-      "declaration": "src/webview/vrBridge.ts:263:26",
+      "scopeId": "src/webview/vrBridge.ts:393:25",
+      "declaration": "src/webview/vrBridge.ts:393:26",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -12514,12 +12767,12 @@
     },
     {
       "name": "message",
-      "scopeId": "src/webview/vrBridge.ts:263:25",
-      "declaration": "src/webview/vrBridge.ts:264:9",
+      "scopeId": "src/webview/vrBridge.ts:393:25",
+      "declaration": "src/webview/vrBridge.ts:394:9",
       "isParameter": false,
       "isMutable": true,
       "reassignments": [
-        "src/webview/vrBridge.ts:266:6"
+        "src/webview/vrBridge.ts:396:6"
       ],
       "inferredType": "unknown"
     },
@@ -13177,16 +13430,16 @@
     },
     {
       "name": "client",
-      "scopeId": "src/webview/panel.ts:677:18",
-      "declaration": "src/webview/panel.ts:677:19",
+      "scopeId": "src/webview/panel.ts:678:18",
+      "declaration": "src/webview/panel.ts:678:19",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "message",
-      "scopeId": "src/webview/panel.ts:677:18",
-      "declaration": "src/webview/panel.ts:677:27",
+      "scopeId": "src/webview/panel.ts:678:18",
+      "declaration": "src/webview/panel.ts:678:27",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
@@ -13194,63 +13447,80 @@
     {
       "name": "url",
       "scopeId": "src/webview/panel.ts:668:2",
-      "declaration": "src/webview/panel.ts:688:9",
+      "declaration": "src/webview/panel.ts:689:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
+    },
+    {
+      "name": "port",
+      "scopeId": "src/webview/panel.ts:668:2",
+      "declaration": "src/webview/panel.ts:693:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "adb",
+      "scopeId": "src/webview/panel.ts:668:2",
+      "declaration": "src/webview/panel.ts:694:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": [],
+      "inferredType": "string"
     },
     {
       "name": "copy",
       "scopeId": "src/webview/panel.ts:668:2",
-      "declaration": "src/webview/panel.ts:691:9",
+      "declaration": "src/webview/panel.ts:697:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "filePath",
-      "scopeId": "src/webview/panel.ts:703:2",
-      "declaration": "src/webview/panel.ts:704:9",
+      "scopeId": "src/webview/panel.ts:712:2",
+      "declaration": "src/webview/panel.ts:713:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "filePath",
-      "scopeId": "src/webview/panel.ts:708:2",
-      "declaration": "src/webview/panel.ts:709:9",
+      "scopeId": "src/webview/panel.ts:717:2",
+      "declaration": "src/webview/panel.ts:718:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "parsed",
-      "scopeId": "src/webview/panel.ts:708:2",
-      "declaration": "src/webview/panel.ts:714:10",
+      "scopeId": "src/webview/panel.ts:717:2",
+      "declaration": "src/webview/panel.ts:723:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "generatedAt",
-      "scopeId": "src/webview/panel.ts:708:2",
-      "declaration": "src/webview/panel.ts:720:10",
+      "scopeId": "src/webview/panel.ts:717:2",
+      "declaration": "src/webview/panel.ts:729:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "savedAtMs",
-      "scopeId": "src/webview/panel.ts:708:2",
-      "declaration": "src/webview/panel.ts:722:11",
+      "scopeId": "src/webview/panel.ts:717:2",
+      "declaration": "src/webview/panel.ts:731:11",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "data",
-      "scopeId": "src/webview/panel.ts:735:2",
-      "declaration": "src/webview/panel.ts:735:34",
+      "scopeId": "src/webview/panel.ts:744:2",
+      "declaration": "src/webview/panel.ts:744:34",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13258,24 +13528,24 @@
     },
     {
       "name": "filePath",
-      "scopeId": "src/webview/panel.ts:735:2",
-      "declaration": "src/webview/panel.ts:736:9",
+      "scopeId": "src/webview/panel.ts:744:2",
+      "declaration": "src/webview/panel.ts:745:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "cameraData",
-      "scopeId": "src/webview/panel.ts:735:2",
-      "declaration": "src/webview/panel.ts:741:10",
+      "scopeId": "src/webview/panel.ts:744:2",
+      "declaration": "src/webview/panel.ts:750:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "html",
-      "scopeId": "src/webview/panel.ts:756:2",
-      "declaration": "src/webview/panel.ts:756:34",
+      "scopeId": "src/webview/panel.ts:765:2",
+      "declaration": "src/webview/panel.ts:765:34",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13283,16 +13553,16 @@
     },
     {
       "name": "target",
-      "scopeId": "src/webview/panel.ts:756:2",
-      "declaration": "src/webview/panel.ts:757:9",
+      "scopeId": "src/webview/panel.ts:765:2",
+      "declaration": "src/webview/panel.ts:766:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "id",
-      "scopeId": "src/webview/panel.ts:782:2",
-      "declaration": "src/webview/panel.ts:782:21",
+      "scopeId": "src/webview/panel.ts:791:2",
+      "declaration": "src/webview/panel.ts:791:21",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13300,8 +13570,8 @@
     },
     {
       "name": "name",
-      "scopeId": "src/webview/panel.ts:782:2",
-      "declaration": "src/webview/panel.ts:782:33",
+      "scopeId": "src/webview/panel.ts:791:2",
+      "declaration": "src/webview/panel.ts:791:33",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13309,56 +13579,56 @@
     },
     {
       "name": "scene",
-      "scopeId": "src/webview/panel.ts:782:2",
-      "declaration": "src/webview/panel.ts:783:9",
+      "scopeId": "src/webview/panel.ts:791:2",
+      "declaration": "src/webview/panel.ts:792:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "chain",
-      "scopeId": "src/webview/panel.ts:782:2",
-      "declaration": "src/webview/panel.ts:785:9",
+      "scopeId": "src/webview/panel.ts:791:2",
+      "declaration": "src/webview/panel.ts:794:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "segment",
-      "scopeId": "src/webview/panel.ts:785:35",
-      "declaration": "src/webview/panel.ts:785:36",
+      "scopeId": "src/webview/panel.ts:794:35",
+      "declaration": "src/webview/panel.ts:794:36",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "index",
-      "scopeId": "src/webview/panel.ts:785:35",
-      "declaration": "src/webview/panel.ts:785:45",
+      "scopeId": "src/webview/panel.ts:794:35",
+      "declaration": "src/webview/panel.ts:794:45",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "parts",
-      "scopeId": "src/webview/panel.ts:785:35",
-      "declaration": "src/webview/panel.ts:785:52",
+      "scopeId": "src/webview/panel.ts:794:35",
+      "declaration": "src/webview/panel.ts:794:52",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "sphere",
-      "scopeId": "src/webview/panel.ts:782:2",
-      "declaration": "src/webview/panel.ts:790:9",
+      "scopeId": "src/webview/panel.ts:791:2",
+      "declaration": "src/webview/panel.ts:799:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "data",
-      "scopeId": "src/webview/panel.ts:800:2",
-      "declaration": "src/webview/panel.ts:800:25",
+      "scopeId": "src/webview/panel.ts:809:2",
+      "declaration": "src/webview/panel.ts:809:25",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13366,40 +13636,40 @@
     },
     {
       "name": "scene",
-      "scopeId": "src/webview/panel.ts:800:2",
-      "declaration": "src/webview/panel.ts:801:9",
+      "scopeId": "src/webview/panel.ts:809:2",
+      "declaration": "src/webview/panel.ts:810:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "state",
-      "scopeId": "src/webview/panel.ts:800:2",
-      "declaration": "src/webview/panel.ts:803:9",
+      "scopeId": "src/webview/panel.ts:809:2",
+      "declaration": "src/webview/panel.ts:812:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "cam",
-      "scopeId": "src/webview/panel.ts:800:2",
-      "declaration": "src/webview/panel.ts:808:10",
+      "scopeId": "src/webview/panel.ts:809:2",
+      "declaration": "src/webview/panel.ts:817:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "focused",
-      "scopeId": "src/webview/panel.ts:800:2",
-      "declaration": "src/webview/panel.ts:818:9",
+      "scopeId": "src/webview/panel.ts:809:2",
+      "declaration": "src/webview/panel.ts:827:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "location",
-      "scopeId": "src/webview/panel.ts:824:2",
-      "declaration": "src/webview/panel.ts:824:38",
+      "scopeId": "src/webview/panel.ts:833:2",
+      "declaration": "src/webview/panel.ts:833:38",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13407,8 +13677,8 @@
     },
     {
       "name": "html",
-      "scopeId": "src/webview/panel.ts:846:2",
-      "declaration": "src/webview/panel.ts:847:3",
+      "scopeId": "src/webview/panel.ts:855:2",
+      "declaration": "src/webview/panel.ts:856:3",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13416,8 +13686,8 @@
     },
     {
       "name": "styleUri",
-      "scopeId": "src/webview/panel.ts:846:2",
-      "declaration": "src/webview/panel.ts:848:3",
+      "scopeId": "src/webview/panel.ts:855:2",
+      "declaration": "src/webview/panel.ts:857:3",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13425,8 +13695,8 @@
     },
     {
       "name": "d3Uri",
-      "scopeId": "src/webview/panel.ts:846:2",
-      "declaration": "src/webview/panel.ts:849:3",
+      "scopeId": "src/webview/panel.ts:855:2",
+      "declaration": "src/webview/panel.ts:858:3",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13434,8 +13704,8 @@
     },
     {
       "name": "threeUri",
-      "scopeId": "src/webview/panel.ts:846:2",
-      "declaration": "src/webview/panel.ts:850:3",
+      "scopeId": "src/webview/panel.ts:855:2",
+      "declaration": "src/webview/panel.ts:859:3",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13443,8 +13713,8 @@
     },
     {
       "name": "scriptUri",
-      "scopeId": "src/webview/panel.ts:846:2",
-      "declaration": "src/webview/panel.ts:851:3",
+      "scopeId": "src/webview/panel.ts:855:2",
+      "declaration": "src/webview/panel.ts:860:3",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13452,8 +13722,8 @@
     },
     {
       "name": "configScript",
-      "scopeId": "src/webview/panel.ts:846:2",
-      "declaration": "src/webview/panel.ts:852:3",
+      "scopeId": "src/webview/panel.ts:855:2",
+      "declaration": "src/webview/panel.ts:861:3",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13461,16 +13731,16 @@
     },
     {
       "name": "showProperties",
-      "scopeId": "src/webview/panel.ts:869:2",
-      "declaration": "src/webview/panel.ts:870:9",
+      "scopeId": "src/webview/panel.ts:878:2",
+      "declaration": "src/webview/panel.ts:879:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "script",
-      "scopeId": "src/webview/panel.ts:869:2",
-      "declaration": "src/webview/panel.ts:871:9",
+      "scopeId": "src/webview/panel.ts:878:2",
+      "declaration": "src/webview/panel.ts:880:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -13478,8 +13748,8 @@
     },
     {
       "name": "extensionUri",
-      "scopeId": "src/webview/panel.ts:878:2",
-      "declaration": "src/webview/panel.ts:878:29",
+      "scopeId": "src/webview/panel.ts:887:2",
+      "declaration": "src/webview/panel.ts:887:29",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13487,64 +13757,55 @@
     },
     {
       "name": "styleUri",
-      "scopeId": "src/webview/panel.ts:878:2",
-      "declaration": "src/webview/panel.ts:880:9",
+      "scopeId": "src/webview/panel.ts:887:2",
+      "declaration": "src/webview/panel.ts:889:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "scriptUri",
-      "scopeId": "src/webview/panel.ts:878:2",
-      "declaration": "src/webview/panel.ts:883:9",
+      "scopeId": "src/webview/panel.ts:887:2",
+      "declaration": "src/webview/panel.ts:892:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "configScript",
-      "scopeId": "src/webview/panel.ts:878:2",
-      "declaration": "src/webview/panel.ts:886:9",
-      "isParameter": false,
-      "isMutable": false,
-      "reassignments": []
-    },
-    {
-      "name": "withSkeletonSlot",
-      "scopeId": "src/webview/panel.ts:878:2",
-      "declaration": "src/webview/panel.ts:894:9",
-      "isParameter": false,
-      "isMutable": false,
-      "reassignments": []
-    },
-    {
-      "name": "skeleton",
-      "scopeId": "src/webview/panel.ts:878:2",
+      "scopeId": "src/webview/panel.ts:887:2",
       "declaration": "src/webview/panel.ts:895:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
-      "name": "skeletonScript",
-      "scopeId": "src/webview/panel.ts:878:2",
-      "declaration": "src/webview/panel.ts:898:9",
-      "isParameter": false,
-      "isMutable": false,
-      "reassignments": [],
-      "inferredType": "string"
-    },
-    {
-      "name": "result",
-      "scopeId": "src/webview/panel.ts:878:2",
-      "declaration": "src/webview/panel.ts:899:9",
+      "name": "libraries",
+      "scopeId": "src/webview/panel.ts:887:2",
+      "declaration": "src/webview/panel.ts:903:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
-      "name": "head",
-      "scopeId": "src/webview/panel.ts:907:2",
+      "name": "withSkeletonSlot",
+      "scopeId": "src/webview/panel.ts:887:2",
+      "declaration": "src/webview/panel.ts:904:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "skeleton",
+      "scopeId": "src/webview/panel.ts:887:2",
+      "declaration": "src/webview/panel.ts:905:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "skeletonScript",
+      "scopeId": "src/webview/panel.ts:887:2",
       "declaration": "src/webview/panel.ts:908:9",
       "isParameter": false,
       "isMutable": false,
@@ -13552,17 +13813,50 @@
       "inferredType": "string"
     },
     {
+      "name": "result",
+      "scopeId": "src/webview/panel.ts:887:2",
+      "declaration": "src/webview/panel.ts:909:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "head",
+      "scopeId": "src/webview/panel.ts:917:2",
+      "declaration": "src/webview/panel.ts:918:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": [],
+      "inferredType": "string"
+    },
+    {
+      "name": "bridge",
+      "scopeId": "src/webview/panel.ts:917:2",
+      "declaration": "src/webview/panel.ts:924:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "libraries",
+      "scopeId": "src/webview/panel.ts:917:2",
+      "declaration": "src/webview/panel.ts:925:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
       "name": "page",
-      "scopeId": "src/webview/panel.ts:907:2",
-      "declaration": "src/webview/panel.ts:912:9",
+      "scopeId": "src/webview/panel.ts:917:2",
+      "declaration": "src/webview/panel.ts:929:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "styleUri",
-      "scopeId": "src/webview/panel.ts:919:2",
-      "declaration": "src/webview/panel.ts:919:27",
+      "scopeId": "src/webview/panel.ts:936:2",
+      "declaration": "src/webview/panel.ts:937:3",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13570,17 +13864,26 @@
     },
     {
       "name": "scriptUri",
-      "scopeId": "src/webview/panel.ts:919:2",
-      "declaration": "src/webview/panel.ts:919:45",
+      "scopeId": "src/webview/panel.ts:936:2",
+      "declaration": "src/webview/panel.ts:938:3",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
       "inferredType": "string"
     },
     {
+      "name": "libraries",
+      "scopeId": "src/webview/panel.ts:936:2",
+      "declaration": "src/webview/panel.ts:939:3",
+      "isParameter": true,
+      "isMutable": true,
+      "reassignments": [],
+      "inferredType": "{ d3: string; three: string }"
+    },
+    {
       "name": "configScript",
-      "scopeId": "src/webview/panel.ts:919:2",
-      "declaration": "src/webview/panel.ts:919:64",
+      "scopeId": "src/webview/panel.ts:936:2",
+      "declaration": "src/webview/panel.ts:940:3",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13588,8 +13891,8 @@
     },
     {
       "name": "head",
-      "scopeId": "src/webview/panel.ts:919:2",
-      "declaration": "src/webview/panel.ts:919:86",
+      "scopeId": "src/webview/panel.ts:936:2",
+      "declaration": "src/webview/panel.ts:941:3",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -13597,8 +13900,8 @@
     },
     {
       "name": "page",
-      "scopeId": "src/webview/panel.ts:919:2",
-      "declaration": "src/webview/panel.ts:920:9",
+      "scopeId": "src/webview/panel.ts:936:2",
+      "declaration": "src/webview/panel.ts:943:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -13606,8 +13909,8 @@
     },
     {
       "name": "x",
-      "scopeId": "src/webview/panel.ts:980:2",
-      "declaration": "src/webview/panel.ts:996:10",
+      "scopeId": "src/webview/panel.ts:1003:2",
+      "declaration": "src/webview/panel.ts:1019:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
@@ -16030,7 +16333,7 @@
       "isParameter": false,
       "isMutable": true,
       "reassignments": [
-        "src/extension.ts:711:2"
+        "src/extension.ts:722:2"
       ],
       "inferredType": "vscode.StatusBarItem"
     },
@@ -16698,7 +17001,7 @@
     {
       "name": "vrBridge",
       "scopeId": "src/extension.ts:69:1",
-      "declaration": "src/extension.ts:549:8",
+      "declaration": "src/extension.ts:551:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -16706,24 +17009,32 @@
     },
     {
       "name": "message",
-      "scopeId": "src/extension.ts:551:3",
-      "declaration": "src/extension.ts:551:4",
+      "scopeId": "src/extension.ts:555:19",
+      "declaration": "src/extension.ts:555:20",
+      "isParameter": true,
+      "isMutable": true,
+      "reassignments": []
+    },
+    {
+      "name": "event",
+      "scopeId": "src/extension.ts:560:45",
+      "declaration": "src/extension.ts:560:46",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "opened",
-      "scopeId": "src/extension.ts:556:66",
-      "declaration": "src/extension.ts:557:10",
+      "scopeId": "src/extension.ts:567:66",
+      "declaration": "src/extension.ts:568:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "graphData",
-      "scopeId": "src/extension.ts:569:67",
-      "declaration": "src/extension.ts:570:10",
+      "scopeId": "src/extension.ts:580:67",
+      "declaration": "src/extension.ts:581:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
@@ -16731,7 +17042,7 @@
     {
       "name": "activateTreeItem",
       "scopeId": "src/extension.ts:69:1",
-      "declaration": "src/extension.ts:585:8",
+      "declaration": "src/extension.ts:596:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -16739,8 +17050,8 @@
     },
     {
       "name": "data",
-      "scopeId": "src/extension.ts:585:27",
-      "declaration": "src/extension.ts:585:34",
+      "scopeId": "src/extension.ts:596:27",
+      "declaration": "src/extension.ts:596:34",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -16748,32 +17059,32 @@
     },
     {
       "name": "typeName",
-      "scopeId": "src/extension.ts:585:27",
-      "declaration": "src/extension.ts:595:9",
+      "scopeId": "src/extension.ts:596:27",
+      "declaration": "src/extension.ts:606:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "usages",
-      "scopeId": "src/extension.ts:585:27",
-      "declaration": "src/extension.ts:599:9",
+      "scopeId": "src/extension.ts:596:27",
+      "declaration": "src/extension.ts:610:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "nodeId",
-      "scopeId": "src/extension.ts:585:27",
-      "declaration": "src/extension.ts:612:9",
+      "scopeId": "src/extension.ts:596:27",
+      "declaration": "src/extension.ts:623:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "rotated",
-      "scopeId": "src/extension.ts:585:27",
-      "declaration": "src/extension.ts:613:9",
+      "scopeId": "src/extension.ts:596:27",
+      "declaration": "src/extension.ts:624:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
@@ -16781,18 +17092,18 @@
     {
       "name": "lastActivation",
       "scopeId": "src/extension.ts:69:1",
-      "declaration": "src/extension.ts:632:6",
+      "declaration": "src/extension.ts:643:6",
       "isParameter": false,
       "isMutable": true,
       "reassignments": [
-        "src/extension.ts:639:3"
+        "src/extension.ts:650:3"
       ],
       "inferredType": "{ id: string; at: number } | undefined"
     },
     {
       "name": "activateTreeItemOnce",
       "scopeId": "src/extension.ts:69:1",
-      "declaration": "src/extension.ts:633:8",
+      "declaration": "src/extension.ts:644:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -16800,8 +17111,8 @@
     },
     {
       "name": "data",
-      "scopeId": "src/extension.ts:633:31",
-      "declaration": "src/extension.ts:633:38",
+      "scopeId": "src/extension.ts:644:31",
+      "declaration": "src/extension.ts:644:38",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -16809,40 +17120,40 @@
     },
     {
       "name": "id",
-      "scopeId": "src/extension.ts:633:31",
-      "declaration": "src/extension.ts:634:9",
-      "isParameter": false,
-      "isMutable": false,
-      "reassignments": []
-    },
-    {
-      "name": "now",
-      "scopeId": "src/extension.ts:633:31",
-      "declaration": "src/extension.ts:635:9",
-      "isParameter": false,
-      "isMutable": false,
-      "reassignments": []
-    },
-    {
-      "name": "event",
-      "scopeId": "src/extension.ts:644:32",
-      "declaration": "src/extension.ts:644:39",
-      "isParameter": true,
-      "isMutable": true,
-      "reassignments": []
-    },
-    {
-      "name": "selected",
-      "scopeId": "src/extension.ts:644:32",
+      "scopeId": "src/extension.ts:644:31",
       "declaration": "src/extension.ts:645:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
+      "name": "now",
+      "scopeId": "src/extension.ts:644:31",
+      "declaration": "src/extension.ts:646:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
+      "name": "event",
+      "scopeId": "src/extension.ts:655:32",
+      "declaration": "src/extension.ts:655:39",
+      "isParameter": true,
+      "isMutable": true,
+      "reassignments": []
+    },
+    {
+      "name": "selected",
+      "scopeId": "src/extension.ts:655:32",
+      "declaration": "src/extension.ts:656:9",
+      "isParameter": false,
+      "isMutable": false,
+      "reassignments": []
+    },
+    {
       "name": "data",
-      "scopeId": "src/extension.ts:658:66",
-      "declaration": "src/extension.ts:658:73",
+      "scopeId": "src/extension.ts:669:66",
+      "declaration": "src/extension.ts:669:73",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -16850,8 +17161,8 @@
     },
     {
       "name": "item",
-      "scopeId": "src/extension.ts:658:66",
-      "declaration": "src/extension.ts:662:10",
+      "scopeId": "src/extension.ts:669:66",
+      "declaration": "src/extension.ts:673:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
@@ -16859,7 +17170,7 @@
     {
       "name": "workspaceFolders",
       "scopeId": "src/extension.ts:69:1",
-      "declaration": "src/extension.ts:670:8",
+      "declaration": "src/extension.ts:681:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
@@ -16867,31 +17178,31 @@
     {
       "name": "workspacePath",
       "scopeId": "src/extension.ts:69:1",
-      "declaration": "src/extension.ts:672:9",
+      "declaration": "src/extension.ts:683:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "registry",
-      "scopeId": "src/extension.ts:679:54",
-      "declaration": "src/extension.ts:688:10",
+      "scopeId": "src/extension.ts:690:54",
+      "declaration": "src/extension.ts:699:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "graphData",
-      "scopeId": "src/extension.ts:679:54",
-      "declaration": "src/extension.ts:698:10",
+      "scopeId": "src/extension.ts:690:54",
+      "declaration": "src/extension.ts:709:10",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "err",
-      "scopeId": "src/extension.ts:703:12",
-      "declaration": "src/extension.ts:703:13",
+      "scopeId": "src/extension.ts:714:12",
+      "declaration": "src/extension.ts:714:13",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -16900,7 +17211,7 @@
     {
       "name": "tacticaWatcher",
       "scopeId": "src/extension.ts:69:1",
-      "declaration": "src/extension.ts:726:8",
+      "declaration": "src/extension.ts:737:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
@@ -16908,7 +17219,7 @@
     {
       "name": "onTacticaEvent",
       "scopeId": "src/extension.ts:69:1",
-      "declaration": "src/extension.ts:727:8",
+      "declaration": "src/extension.ts:738:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -16916,8 +17227,8 @@
     },
     {
       "name": "uri",
-      "scopeId": "src/extension.ts:727:25",
-      "declaration": "src/extension.ts:727:26",
+      "scopeId": "src/extension.ts:738:25",
+      "declaration": "src/extension.ts:738:26",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -16926,23 +17237,23 @@
     {
       "name": "debugHandle",
       "scopeId": "src/extension.ts:69:1",
-      "declaration": "src/extension.ts:743:8",
+      "declaration": "src/extension.ts:754:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "found",
-      "scopeId": "src/extension.ts:765:1",
-      "declaration": "src/extension.ts:766:8",
+      "scopeId": "src/extension.ts:776:1",
+      "declaration": "src/extension.ts:777:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "roots",
-      "scopeId": "src/extension.ts:765:1",
-      "declaration": "src/extension.ts:767:8",
+      "scopeId": "src/extension.ts:776:1",
+      "declaration": "src/extension.ts:778:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -16950,40 +17261,40 @@
     },
     {
       "name": "uri",
-      "scopeId": "src/extension.ts:765:1",
-      "declaration": "src/extension.ts:768:13",
+      "scopeId": "src/extension.ts:776:1",
+      "declaration": "src/extension.ts:779:13",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "ordered",
-      "scopeId": "src/extension.ts:765:1",
-      "declaration": "src/extension.ts:771:8",
+      "scopeId": "src/extension.ts:776:1",
+      "declaration": "src/extension.ts:782:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "a",
-      "scopeId": "src/extension.ts:771:34",
-      "declaration": "src/extension.ts:771:35",
+      "scopeId": "src/extension.ts:782:34",
+      "declaration": "src/extension.ts:782:35",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "b",
-      "scopeId": "src/extension.ts:771:34",
-      "declaration": "src/extension.ts:771:38",
+      "scopeId": "src/extension.ts:782:34",
+      "declaration": "src/extension.ts:782:38",
       "isParameter": true,
       "isMutable": true,
       "reassignments": []
     },
     {
       "name": "_context",
-      "scopeId": "src/extension.ts:775:1",
-      "declaration": "src/extension.ts:775:33",
+      "scopeId": "src/extension.ts:786:1",
+      "declaration": "src/extension.ts:786:33",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -16991,32 +17302,32 @@
     },
     {
       "name": "logger",
-      "scopeId": "src/extension.ts:775:1",
-      "declaration": "src/extension.ts:776:8",
+      "scopeId": "src/extension.ts:786:1",
+      "declaration": "src/extension.ts:787:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "workspaceFolders",
-      "scopeId": "src/extension.ts:775:1",
-      "declaration": "src/extension.ts:777:8",
+      "scopeId": "src/extension.ts:786:1",
+      "declaration": "src/extension.ts:788:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "registry",
-      "scopeId": "src/extension.ts:775:1",
-      "declaration": "src/extension.ts:789:9",
+      "scopeId": "src/extension.ts:786:1",
+      "declaration": "src/extension.ts:800:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "graphData",
-      "scopeId": "src/extension.ts:775:1",
-      "declaration": "src/extension.ts:793:9",
+      "scopeId": "src/extension.ts:786:1",
+      "declaration": "src/extension.ts:804:9",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
@@ -17024,7 +17335,7 @@
     {
       "name": "tacticaChangedRoots",
       "scopeId": "src/extension.ts",
-      "declaration": "src/extension.ts:816:7",
+      "declaration": "src/extension.ts:827:7",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -17033,7 +17344,7 @@
     {
       "name": "tacticaDebounceTimer",
       "scopeId": "src/extension.ts",
-      "declaration": "src/extension.ts:817:5",
+      "declaration": "src/extension.ts:828:5",
       "isParameter": false,
       "isMutable": true,
       "reassignments": [],
@@ -17041,8 +17352,8 @@
     },
     {
       "name": "context",
-      "scopeId": "src/extension.ts:823:1",
-      "declaration": "src/extension.ts:823:36",
+      "scopeId": "src/extension.ts:834:1",
+      "declaration": "src/extension.ts:834:36",
       "isParameter": true,
       "isMutable": true,
       "reassignments": [],
@@ -17050,8 +17361,8 @@
     },
     {
       "name": "roots",
-      "scopeId": "src/extension.ts:823:1",
-      "declaration": "src/extension.ts:824:8",
+      "scopeId": "src/extension.ts:834:1",
+      "declaration": "src/extension.ts:835:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": [],
@@ -17059,24 +17370,24 @@
     },
     {
       "name": "sidebarRoot",
-      "scopeId": "src/extension.ts:823:1",
-      "declaration": "src/extension.ts:826:8",
+      "scopeId": "src/extension.ts:834:1",
+      "declaration": "src/extension.ts:837:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "root",
-      "scopeId": "src/extension.ts:823:1",
-      "declaration": "src/extension.ts:827:13",
+      "scopeId": "src/extension.ts:834:1",
+      "declaration": "src/extension.ts:838:13",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []
     },
     {
       "name": "logger",
-      "scopeId": "src/extension.ts:836:1",
-      "declaration": "src/extension.ts:838:8",
+      "scopeId": "src/extension.ts:847:1",
+      "declaration": "src/extension.ts:849:8",
       "isParameter": false,
       "isMutable": false,
       "reassignments": []

@@ -1,6 +1,6 @@
 {
   "version": "1.2",
-  "generatedAt": "2026-10-30T17:14:54.493Z",
+  "generatedAt": "2026-10-30T17:34:49.626Z",
   "usages": {
     "LoggerTab": [
       {
@@ -245,36 +245,36 @@
         "holderScopeId": "src/webview/panel.ts:621:2"
       },
       {
-        "location": "src/webview/panel.ts:743:25",
+        "location": "src/webview/panel.ts:752:25",
         "kind": "instantiation",
         "code": "new this.scene.Camera3D(cameraData)",
         "constructorText": "this.scene.Camera3D",
-        "holderScopeId": "src/webview/panel.ts:735:2"
+        "holderScopeId": "src/webview/panel.ts:744:2"
       },
       {
-        "location": "src/webview/panel.ts:809:19",
+        "location": "src/webview/panel.ts:818:19",
         "kind": "instantiation",
         "code": "new scene.Camera3D({\n\t\t\t\tx         : finiteOrZero(cam.pan?.x),\n\t\t\t\ty         : finiteOrZero(cam.pan?",
         "constructorText": "scene.Camera3D",
-        "holderScopeId": "src/webview/panel.ts:800:2"
+        "holderScopeId": "src/webview/panel.ts:809:2"
       }
     ],
     "collection_2::Scene3D.Tube3D": [
       {
-        "location": "src/webview/panel.ts:789:16",
+        "location": "src/webview/panel.ts:798:16",
         "kind": "instantiation",
         "code": "new scene.Tube3D({ id, chain })",
         "constructorText": "scene.Tube3D",
-        "holderScopeId": "src/webview/panel.ts:782:2"
+        "holderScopeId": "src/webview/panel.ts:791:2"
       }
     ],
     "collection_2::Scene3D.GraphNode3D.Tooltip3D": [
       {
-        "location": "src/webview/panel.ts:792:20",
+        "location": "src/webview/panel.ts:801:20",
         "kind": "instantiation",
         "code": "new sphere.Tooltip3D({ targetNode: id, content: name, visible: true })",
         "constructorText": "sphere.Tooltip3D",
-        "holderScopeId": "src/webview/panel.ts:782:2"
+        "holderScopeId": "src/webview/panel.ts:791:2"
       }
     ],
     "collection_1::Trie.GraphNodeTrie.ContextMenu": [

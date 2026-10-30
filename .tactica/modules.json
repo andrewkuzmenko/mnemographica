@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-10-30T17:14:54.517Z",
+  "generatedAt": "2026-10-30T17:34:49.648Z",
   "modules": {
     "src/topologica/bootstrap.ts": {
       "filePath": "src/topologica/bootstrap.ts",
@@ -1684,6 +1684,24 @@
         },
         {
           "name": "VrSessionHost",
+          "kind": "type",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "isReExport": false
+        },
+        {
+          "name": "vrLibrary",
+          "kind": "type",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "isReExport": false
+        },
+        {
+          "name": "VR_LIBRARIES",
+          "kind": "const",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "isReExport": false
+        },
+        {
+          "name": "VrBridgeOptions",
           "kind": "type",
           "sourceModule": "src/webview/vrBridge.ts",
           "isReExport": false

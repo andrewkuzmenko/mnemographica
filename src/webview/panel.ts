@@ -670,7 +670,8 @@ export class GraphPanel {
 		if (!bridge) {
 			return;
 		}
-		if (!this.vr) {
+		// A restarted bridge (port change) forgot the old session
+		if (!this.vr || !bridge.has(this.vr.token)) {
 			try {
 				this.vr = await bridge.open({
 					pageHtml  : () => this.getVrPageContent(),
@@ -686,14 +687,22 @@ export class GraphPanel {
 			}
 		}
 		const url = this.vr.url;
+		// Quest Browser over USB: forward the bridge port into the headset
+		// (127.0.0.1 there is a secure context, so WebXR works on plain
+		// http) and open the page in the browser
+		const port = new URL(url).port;
+		const adb = `adb reverse tcp:${port} tcp:${port} && adb shell am start -a android.intent.action.VIEW -d '${url}' com.oculus.browser`;
 		logger.info(`[GraphPanel] VR page for ${this.sourceName}: ${url}`);
 		await vscode.env.openExternal(vscode.Uri.parse(url));
 		const copy = await vscode.window.showInformationMessage(
-			`Ψ ${this.sourceName} opened in the browser for VR — Chrome or Edge with Meta Quest Link as the active OpenXR runtime, then 🥽 Enter VR.`,
-			'Copy URL'
+			`Ψ ${this.sourceName} opened in the browser for VR: Chrome or Edge with Meta Quest Link, then 🥽 VR. Quest on USB without Link: run the adb command, then 🥽 VR in the headset.`,
+			'Copy URL',
+			'Copy adb command'
 		);
-		if (copy) {
+		if (copy === 'Copy URL') {
 			await vscode.env.clipboard.writeText(url);
+		} else if (copy === 'Copy adb command') {
+			await vscode.env.clipboard.writeText(adb);
 		}
 	}
 
@@ -891,7 +900,8 @@ export class GraphPanel {
 		// and arrangement — assembles the file; the host only writes it.
 		// The skeleton derives from the very HTML served here, so the
 		// export can never drift from the page it packs
-		const withSkeletonSlot = GraphPanel.pageHtml(String(styleUri), String(scriptUri), configScript, '');
+		const libraries = { d3: GraphPanel.D3_URI, three: GraphPanel.THREE_URI };
+		const withSkeletonSlot = GraphPanel.pageHtml(String(styleUri), String(scriptUri), libraries, configScript, '');
 		const skeleton = this.buildExportSkeleton(
 			withSkeletonSlot, String(styleUri), GraphPanel.D3_URI, GraphPanel.THREE_URI, String(scriptUri), configScript
 		);
@@ -909,14 +919,27 @@ export class GraphPanel {
 	<script>${VR_PAGE_BOOT}
 	</script>
 `;
-		const page = GraphPanel.pageHtml('/media/webview.css', '/media/webview.js', GraphPanel.configScript(), head)
+		// d3/three from the bridge when it holds verified copies — a
+		// headset on adb reverse may have no network
+		const bridge = GraphPanel.vrBridge;
+		const libraries = {
+			d3    : (bridge && bridge.libraryUrl('d3.min.js')) || GraphPanel.D3_URI,
+			three : (bridge && bridge.libraryUrl('three.min.js')) || GraphPanel.THREE_URI
+		};
+		const page = GraphPanel.pageHtml('/media/webview.css', '/media/webview.js', libraries, GraphPanel.configScript(), head)
 			.replace('<!--__MNEMO_SKELETON_SCRIPT__-->', '');
 		return page;
 	}
 
 	// The graph page template. `head` lands at the end of <head>, before
 	// any app script runs
-	private static pageHtml (styleUri: string, scriptUri: string, configScript: string, head: string): string {
+	private static pageHtml (
+		styleUri: string,
+		scriptUri: string,
+		libraries: { d3: string; three: string },
+		configScript: string,
+		head: string
+	): string {
 		const page = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -924,8 +947,8 @@ export class GraphPanel {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Mnemonica Graph</title>
 	<link rel="stylesheet" href="${styleUri}">
-	<script src="${GraphPanel.D3_URI}"></script>
-	<script src="${GraphPanel.THREE_URI}"></script>
+	<script src="${libraries.d3}"></script>
+	<script src="${libraries.three}"></script>
 ${head}</head>
 <body>
 	<!-- the collection selector pins to the top-LEFT corner, away from

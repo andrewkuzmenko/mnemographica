@@ -1,6 +1,6 @@
 {
   "version": "1.2",
-  "generatedAt": "2026-10-30T17:14:54.496Z",
+  "generatedAt": "2026-10-30T17:34:49.629Z",
   "flow": {
     "LoggerService": [
       {
@@ -2801,26 +2801,32 @@
         "targetType": "Map"
       },
       {
-        "location": "src/webview/vrBridge.ts:45:21",
+        "location": "src/webview/vrBridge.ts:85:21",
         "kind": "instantiation",
         "code": "new Map([\n\t['webview.css', 'text/css; charset=utf-8'],\n\t['webview.js', 'text/javascript; charset=utf",
         "context": "new expression"
       },
       {
-        "location": "src/webview/vrBridge.ts:106:30",
+        "location": "src/webview/vrBridge.ts:146:30",
         "kind": "instantiation",
         "code": "new Map<string, vrSession>()",
         "context": "new expression"
       },
       {
-        "location": "src/webview/vrBridge.ts:227:29",
+        "location": "src/webview/vrBridge.ts:148:34",
+        "kind": "instantiation",
+        "code": "new Map<string, string>()",
+        "context": "new expression"
+      },
+      {
+        "location": "src/webview/vrBridge.ts:357:29",
         "kind": "methodCall",
         "code": "MEDIA_TYPES.get(media[1])",
         "propertyName": "get",
         "targetType": "Map"
       },
       {
-        "location": "src/webview/vrBridge.ts:227:29",
+        "location": "src/webview/vrBridge.ts:357:29",
         "kind": "propertyRead",
         "code": "MEDIA_TYPES.get",
         "propertyName": "get",
@@ -3915,14 +3921,14 @@
         "targetType": "vscode.TreeItem"
       },
       {
-        "location": "src/extension.ts:663:16",
+        "location": "src/extension.ts:674:16",
         "kind": "propertyRead",
         "code": "item.collapsibleState",
         "propertyName": "collapsibleState",
         "targetType": "vscode.TreeItem"
       },
       {
-        "location": "src/extension.ts:664:5",
+        "location": "src/extension.ts:675:5",
         "kind": "passAsArg",
         "code": "treeView.reveal(item, { select: false, focus: false, expand: true })",
         "targetType": "vscode.TreeItem",
@@ -4377,7 +4383,7 @@
         "targetType": "Set"
       },
       {
-        "location": "src/webview/vrBridge.ts:120:45",
+        "location": "src/webview/vrBridge.ts:169:45",
         "kind": "instantiation",
         "code": "new Set()",
         "context": "new expression"
@@ -4409,7 +4415,7 @@
         "targetType": "Set"
       },
       {
-        "location": "src/webview/panel.ts:900:3",
+        "location": "src/webview/panel.ts:910:3",
         "kind": "return",
         "code": "return result;",
         "targetType": "Set"
@@ -4526,52 +4532,52 @@
         "targetType": "Set"
       },
       {
-        "location": "src/extension.ts:767:16",
+        "location": "src/extension.ts:778:16",
         "kind": "instantiation",
         "code": "new Set<string>()",
         "context": "new expression"
       },
       {
-        "location": "src/extension.ts:769:3",
+        "location": "src/extension.ts:780:3",
         "kind": "methodCall",
         "code": "roots.add(projectRootOfContractFile(uri.fsPath))",
         "propertyName": "add",
         "targetType": "Set"
       },
       {
-        "location": "src/extension.ts:769:3",
+        "location": "src/extension.ts:780:3",
         "kind": "propertyRead",
         "code": "roots.add",
         "propertyName": "add",
         "targetType": "Set"
       },
       {
-        "location": "src/extension.ts:771:19",
+        "location": "src/extension.ts:782:19",
         "kind": "spread",
         "code": "...roots",
         "targetType": "Set"
       },
       {
-        "location": "src/extension.ts:816:29",
+        "location": "src/extension.ts:827:29",
         "kind": "instantiation",
         "code": "new Set<string>()",
         "context": "new expression"
       },
       {
-        "location": "src/extension.ts:824:17",
+        "location": "src/extension.ts:835:17",
         "kind": "spread",
         "code": "...tacticaChangedRoots",
         "targetType": "Set"
       },
       {
-        "location": "src/extension.ts:825:2",
+        "location": "src/extension.ts:836:2",
         "kind": "methodCall",
         "code": "tacticaChangedRoots.clear()",
         "propertyName": "clear",
         "targetType": "Set"
       },
       {
-        "location": "src/extension.ts:825:2",
+        "location": "src/extension.ts:836:2",
         "kind": "propertyRead",
         "code": "tacticaChangedRoots.clear",
         "propertyName": "clear",
@@ -4824,14 +4830,14 @@
         "context": "arg 1 to wrapForSelfTrace"
       },
       {
-        "location": "src/extension.ts:692:5",
+        "location": "src/extension.ts:703:5",
         "kind": "passAsArg",
         "code": "wireSidebarProviders(registry)",
         "targetType": "Registry",
         "context": "arg 0 to wireSidebarProviders"
       },
       {
-        "location": "src/extension.ts:791:4",
+        "location": "src/extension.ts:802:4",
         "kind": "passAsArg",
         "code": "wireSidebarProviders(registry)",
         "targetType": "Registry",
@@ -5315,70 +5321,70 @@
         "targetType": "collection_2::Scene3D"
       },
       {
-        "location": "src/webview/panel.ts:789:3",
+        "location": "src/webview/panel.ts:798:3",
         "kind": "propertyWrite",
         "code": "scene.tube = new scene.Tube3D({ id, chain })",
         "propertyName": "tube",
         "targetType": "collection_2::Scene3D"
       },
       {
-        "location": "src/webview/panel.ts:789:3",
+        "location": "src/webview/panel.ts:798:3",
         "kind": "propertyRead",
         "code": "scene.tube",
         "propertyName": "tube",
         "targetType": "collection_2::Scene3D"
       },
       {
-        "location": "src/webview/panel.ts:789:20",
+        "location": "src/webview/panel.ts:798:20",
         "kind": "propertyRead",
         "code": "scene.Tube3D",
         "propertyName": "Tube3D",
         "targetType": "collection_2::Scene3D"
       },
       {
-        "location": "src/webview/panel.ts:790:18",
+        "location": "src/webview/panel.ts:799:18",
         "kind": "methodCall",
         "code": "scene.getNode(id)",
         "propertyName": "getNode",
         "targetType": "collection_2::Scene3D"
       },
       {
-        "location": "src/webview/panel.ts:790:18",
+        "location": "src/webview/panel.ts:799:18",
         "kind": "propertyRead",
         "code": "scene.getNode",
         "propertyName": "getNode",
         "targetType": "collection_2::Scene3D"
       },
       {
-        "location": "src/webview/panel.ts:792:4",
+        "location": "src/webview/panel.ts:801:4",
         "kind": "propertyWrite",
         "code": "scene.tooltip = new sphere.Tooltip3D({ targetNode: id, content: name, visible: true })",
         "propertyName": "tooltip",
         "targetType": "collection_2::Scene3D"
       },
       {
-        "location": "src/webview/panel.ts:792:4",
+        "location": "src/webview/panel.ts:801:4",
         "kind": "propertyRead",
         "code": "scene.tooltip",
         "propertyName": "tooltip",
         "targetType": "collection_2::Scene3D"
       },
       {
-        "location": "src/webview/panel.ts:809:4",
+        "location": "src/webview/panel.ts:818:4",
         "kind": "propertyWrite",
         "code": "scene.camera = new scene.Camera3D({\n\t\t\t\tx         : finiteOrZero(cam.pan?.x),\n\t\t\t\ty         : finite",
         "propertyName": "camera",
         "targetType": "collection_2::Scene3D"
       },
       {
-        "location": "src/webview/panel.ts:809:4",
+        "location": "src/webview/panel.ts:818:4",
         "kind": "propertyRead",
         "code": "scene.camera",
         "propertyName": "camera",
         "targetType": "collection_2::Scene3D"
       },
       {
-        "location": "src/webview/panel.ts:809:23",
+        "location": "src/webview/panel.ts:818:23",
         "kind": "propertyRead",
         "code": "scene.Camera3D",
         "propertyName": "Camera3D",
@@ -5400,7 +5406,7 @@
         "context": "arg 1 to addNode"
       },
       {
-        "location": "src/webview/panel.ts:792:24",
+        "location": "src/webview/panel.ts:801:24",
         "kind": "propertyRead",
         "code": "sphere.Tooltip3D",
         "propertyName": "Tooltip3D",
@@ -5746,9 +5752,41 @@
         "context": "new expression"
       }
     ],
+    "Error": [
+      {
+        "location": "src/webview/vrBridge.ts:249:12",
+        "kind": "instantiation",
+        "code": "new Error(`HTTP ${response.status}`)",
+        "context": "new expression"
+      },
+      {
+        "location": "src/webview/vrBridge.ts:254:12",
+        "kind": "instantiation",
+        "code": "new Error(`sha256 ${sha256} does not match the pinned ${library.sha256}`)",
+        "context": "new expression"
+      },
+      {
+        "location": "src/strategy/server.ts:308:11",
+        "kind": "instantiation",
+        "code": "new Error(`Unknown tool: ${name}`)",
+        "context": "new expression"
+      },
+      {
+        "location": "src/strategy/appChannelClient.ts:68:42",
+        "kind": "instantiation",
+        "code": "new Error(String(err))",
+        "context": "new expression"
+      },
+      {
+        "location": "src/strategy/appChannelClient.ts:74:20",
+        "kind": "instantiation",
+        "code": "new Error(`discovery timeout after ${timeoutMs}ms`)",
+        "context": "new expression"
+      }
+    ],
     "Promise": [
       {
-        "location": "src/webview/vrBridge.ts:169:20",
+        "location": "src/webview/vrBridge.ts:283:20",
         "kind": "instantiation",
         "code": "new Promise<number>((resolve, reject) => {\n\t\t\tconst server = http.createServer((req, res) => this.se",
         "context": "new expression"
@@ -5826,7 +5864,7 @@
     ],
     "ws.Server": [
       {
-        "location": "src/webview/vrBridge.ts:171:20",
+        "location": "src/webview/vrBridge.ts:285:20",
         "kind": "instantiation",
         "code": "new ws.Server({ noServer: true })",
         "context": "new expression"
@@ -5840,37 +5878,57 @@
     ],
     "URL": [
       {
-        "location": "src/webview/vrBridge.ts:215:20",
+        "location": "src/webview/vrBridge.ts:333:20",
         "kind": "instantiation",
         "code": "new URL(req.url ?? '/', 'http://127.0.0.1')",
         "context": "new expression"
       },
       {
-        "location": "src/webview/vrBridge.ts:216:16",
+        "location": "src/webview/vrBridge.ts:334:16",
         "kind": "passAsArg",
         "code": "/^\\/vr\\/([0-9a-f]+)$/.exec(pathname)",
         "targetType": "URL",
         "context": "arg 0 to exec"
       },
       {
-        "location": "src/webview/vrBridge.ts:226:17",
+        "location": "src/webview/vrBridge.ts:344:19",
+        "kind": "passAsArg",
+        "code": "/^\\/lib\\/([a-z0-9.]+)$/.exec(pathname)",
+        "targetType": "URL",
+        "context": "arg 0 to exec"
+      },
+      {
+        "location": "src/webview/vrBridge.ts:356:17",
         "kind": "passAsArg",
         "code": "/^\\/media\\/([a-z.]+)$/.exec(pathname)",
         "targetType": "URL",
         "context": "arg 0 to exec"
       },
       {
-        "location": "src/webview/vrBridge.ts:246:20",
+        "location": "src/webview/vrBridge.ts:376:20",
         "kind": "instantiation",
         "code": "new URL(req.url ?? '/', 'http://127.0.0.1')",
         "context": "new expression"
       },
       {
-        "location": "src/webview/vrBridge.ts:247:17",
+        "location": "src/webview/vrBridge.ts:377:17",
         "kind": "passAsArg",
         "code": "/^\\/ws\\/([0-9a-f]+)$/.exec(pathname)",
         "targetType": "URL",
         "context": "arg 0 to exec"
+      },
+      {
+        "location": "src/webview/panel.ts:693:16",
+        "kind": "instantiation",
+        "code": "new URL(url)",
+        "context": "new expression"
+      },
+      {
+        "location": "src/strategy/appChannelClient.ts:105:26",
+        "kind": "passAsArg",
+        "code": "WSSession.connect(host, port, token)",
+        "targetType": "URL",
+        "context": "arg 1 to connect"
       },
       {
         "location": "src/webview/appChannelPanel.ts:33:16",
@@ -5971,13 +6029,13 @@
         "context": "new expression"
       },
       {
-        "location": "src/webview/panel.ts:743:25",
+        "location": "src/webview/panel.ts:752:25",
         "kind": "instantiation",
         "code": "new this.scene.Camera3D(cameraData)",
         "context": "new expression"
       },
       {
-        "location": "src/webview/panel.ts:809:19",
+        "location": "src/webview/panel.ts:818:19",
         "kind": "instantiation",
         "code": "new scene.Camera3D({\n\t\t\t\tx         : finiteOrZero(cam.pan?.x),\n\t\t\t\ty         : finiteOrZero(cam.pan?",
         "context": "new expression"
@@ -5985,7 +6043,7 @@
     ],
     "collection_2::Scene3D.Tube3D": [
       {
-        "location": "src/webview/panel.ts:789:16",
+        "location": "src/webview/panel.ts:798:16",
         "kind": "instantiation",
         "code": "new scene.Tube3D({ id, chain })",
         "context": "new expression"
@@ -5993,29 +6051,9 @@
     ],
     "collection_2::Scene3D.GraphNode3D.Tooltip3D": [
       {
-        "location": "src/webview/panel.ts:792:20",
+        "location": "src/webview/panel.ts:801:20",
         "kind": "instantiation",
         "code": "new sphere.Tooltip3D({ targetNode: id, content: name, visible: true })",
-        "context": "new expression"
-      }
-    ],
-    "Error": [
-      {
-        "location": "src/strategy/server.ts:308:11",
-        "kind": "instantiation",
-        "code": "new Error(`Unknown tool: ${name}`)",
-        "context": "new expression"
-      },
-      {
-        "location": "src/strategy/appChannelClient.ts:68:42",
-        "kind": "instantiation",
-        "code": "new Error(String(err))",
-        "context": "new expression"
-      },
-      {
-        "location": "src/strategy/appChannelClient.ts:74:20",
-        "kind": "instantiation",
-        "code": "new Error(`discovery timeout after ${timeoutMs}ms`)",
         "context": "new expression"
       }
     ],
@@ -6191,24 +6229,38 @@
     ],
     "VrBridge": [
       {
-        "location": "src/extension.ts:549:19",
+        "location": "src/extension.ts:551:19",
         "kind": "instantiation",
-        "code": "new VrBridge(\n\t\tvscode.Uri.joinPath(context.extensionUri, 'media').fsPath,\n\t\t(message) => logger.inf",
+        "code": "new VrBridge({\n\t\textensionRoot : context.extensionUri.fsPath,\n\t\tcacheDir      : vscode.Uri.joinPath(",
         "context": "new expression"
       },
       {
-        "location": "src/extension.ts:553:2",
+        "location": "src/extension.ts:557:2",
         "kind": "passAsArg",
         "code": "GraphPanel.setVrBridge(vrBridge)",
         "targetType": "VrBridge",
         "context": "arg 0 to setVrBridge"
       },
       {
-        "location": "src/extension.ts:554:2",
+        "location": "src/extension.ts:558:2",
         "kind": "passAsArg",
-        "code": "context.subscriptions.push(vrBridge)",
+        "code": "context.subscriptions.push(\n\t\tvrBridge,\n\t\tvscode.workspace.onDidChangeConfiguration((event) => {\n\t\t\t",
         "targetType": "VrBridge",
         "context": "arg 0 to push"
+      },
+      {
+        "location": "src/extension.ts:562:5",
+        "kind": "methodCall",
+        "code": "vrBridge.dispose()",
+        "propertyName": "dispose",
+        "targetType": "VrBridge"
+      },
+      {
+        "location": "src/extension.ts:562:5",
+        "kind": "propertyRead",
+        "code": "vrBridge.dispose",
+        "propertyName": "dispose",
+        "targetType": "VrBridge"
       }
     ],
     "collection_1::Definitions": [

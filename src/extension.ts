@@ -545,13 +545,24 @@ export function activate(context: vscode.ExtensionContext) {
 		})
 	);
 	// The VR bridge serves graph panels to the system browser, where
-	// WebXR reaches the headset; it listens only once a panel opens VR
-	const vrBridge = new VrBridge(
-		vscode.Uri.joinPath(context.extensionUri, 'media').fsPath,
-		(message) => logger.info(message)
-	);
+	// WebXR reaches the headset; it listens only once a panel opens VR.
+	// A port change restarts it: open VR pages close, the next 🥽 opens
+	// on the new port
+	const vrBridge = new VrBridge({
+		extensionRoot : context.extensionUri.fsPath,
+		cacheDir      : vscode.Uri.joinPath(context.globalStorageUri, 'vr-lib').fsPath,
+		port          : () => vscode.workspace.getConfiguration('mnemographica').get<number>('vrBridgePort', 0),
+		log           : (message) => logger.info(message)
+	});
 	GraphPanel.setVrBridge(vrBridge);
-	context.subscriptions.push(vrBridge);
+	context.subscriptions.push(
+		vrBridge,
+		vscode.workspace.onDidChangeConfiguration((event) => {
+			if (event.affectsConfiguration('mnemographica.vrBridgePort')) {
+				vrBridge.dispose();
+			}
+		})
+	);
 	context.subscriptions.push(
 		vscode.commands.registerCommand('mnemographica.openGraphInVR', async () => {
 			const opened = await GraphPanel.openActiveInVR();

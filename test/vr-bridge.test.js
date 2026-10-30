@@ -3,16 +3,27 @@
 // VrBridge: the loopback HTTP + WebSocket server that mirrors a graph
 // panel into the system browser for WebXR. Pins the page and media
 // routes, the token gate, the Host/Origin checks (DNS rebinding and
-// cross-site sockets stay out), the two-way message mirror, and the
-// close code that tells a page its panel is gone.
+// cross-site sockets stay out), the two-way message mirror, the close
+// code that tells a page its panel is gone, the /lib/ libraries (vendor
+// copy, verified download, CDN fallback) and the fixed port.
 
 const assert = require('assert');
+const crypto = require('crypto');
+const fs = require('fs');
 const http = require('http');
+const os = require('os');
 const path = require('path');
 const WebSocket = require('ws');
 const { VrBridge, VR_SESSION_CLOSED } = require('../out/src/webview/vrBridge');
 
-const mediaRoot = path.join(__dirname, '..', 'media');
+const extensionRoot = path.join(__dirname, '..');
+const host = { pageHtml: () => '<!DOCTYPE html>', onMessage: () => {} };
+const sha256 = (text) => crypto.createHash('sha256').update(text).digest('hex');
+
+// A one-off server on a free port, resolving with it
+const listen = (server) => new Promise((resolve) => {
+	server.listen(0, '127.0.0.1', () => resolve(server.address().port));
+});
 
 const get = (url, headers = {}) => new Promise((resolve, reject) => {
 	const req = http.get(url, { headers }, (res) => {
@@ -44,7 +55,7 @@ async function runTests () {
 	console.log('=== VrBridge Tests ===\n');
 
 	const received = [];
-	const bridge = new VrBridge(mediaRoot);
+	const bridge = new VrBridge({ extensionRoot });
 	const opened = await bridge.open({
 		pageHtml  : () => '<!DOCTYPE html><title>vr page</title>',
 		onMessage : (client, message) => {
@@ -113,7 +124,79 @@ async function runTests () {
 	assert.strictEqual((await get(url)).status, 404, 'a closed session has no page');
 	console.log('  ✓ close: pages get VR_SESSION_CLOSED, the page is gone\n');
 
+	// No vendor copy, no cache directory: the page stays on the CDN
+	assert.strictEqual(bridge.libraryUrl('three.min.js'), null, 'no local three → CDN');
+	assert.strictEqual(bridge.has(token), false);
 	bridge.dispose();
+
+	// Libraries: a verified vendor/ copy serves; a vendor copy with the
+	// wrong hash is replaced by a verified download into the cache; a
+	// download with the wrong hash or a failing one leaves the CDN
+	const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'vr-bridge-'));
+	const libRoot = path.join(scratch, 'ext');
+	const cacheDir = path.join(scratch, 'cache');
+	fs.mkdirSync(path.join(libRoot, 'vendor'), { recursive: true });
+	fs.writeFileSync(path.join(libRoot, 'vendor', 'vendored.js'), 'vendored();');
+	fs.writeFileSync(path.join(libRoot, 'vendor', 'stale.js'), 'stale();');
+	const cdn = http.createServer((req, res) => {
+		const bodies = { '/stale.js': 'fresh();', '/tampered.js': 'evil();' };
+		if (bodies[req.url]) {
+			res.end(bodies[req.url]);
+		} else {
+			res.statusCode = 404;
+			res.end();
+		}
+	});
+	const cdnPort = await listen(cdn);
+	const cdnUrl = (name) => `http://127.0.0.1:${cdnPort}/${name}`;
+	const libBridge = new VrBridge({
+		extensionRoot : libRoot,
+		cacheDir,
+		libraries     : [
+			{ name: 'vendored.js', url: cdnUrl('vendored.js'), sha256: sha256('vendored();') },
+			{ name: 'stale.js', url: cdnUrl('stale.js'), sha256: sha256('fresh();') },
+			{ name: 'tampered.js', url: cdnUrl('tampered.js'), sha256: sha256('genuine();') },
+			{ name: 'gone.js', url: cdnUrl('gone.js'), sha256: sha256('gone();') }
+		]
+	});
+	const libOpened = await libBridge.open(host);
+	const libBase = new URL(libOpened.url).origin;
+	assert.strictEqual(libBridge.libraryUrl('vendored.js'), '/lib/vendored.js', 'verified vendor copy');
+	assert.strictEqual((await get(`${libBase}/lib/vendored.js`)).body, 'vendored();');
+	assert.strictEqual(libBridge.libraryUrl('stale.js'), '/lib/stale.js', 'wrong-hash vendor copy → verified download');
+	assert.strictEqual((await get(`${libBase}/lib/stale.js`)).body, 'fresh();');
+	assert.strictEqual(fs.readFileSync(path.join(cacheDir, 'stale.js'), 'utf8'), 'fresh();', 'the download is cached');
+	assert.strictEqual(libBridge.libraryUrl('tampered.js'), null, 'a download with the wrong hash is refused');
+	assert.ok(!fs.existsSync(path.join(cacheDir, 'tampered.js')), 'and never written');
+	assert.strictEqual(libBridge.libraryUrl('gone.js'), null, 'a failed download leaves the CDN');
+	assert.strictEqual((await get(`${libBase}/lib/gone.js`)).status, 404);
+	libBridge.dispose();
+	cdn.close();
+	// The cache serves the next start without the network
+	const offline = new VrBridge({
+		extensionRoot : libRoot,
+		cacheDir,
+		libraries     : [{ name: 'stale.js', url: 'http://127.0.0.1:1/stale.js', sha256: sha256('fresh();') }]
+	});
+	await offline.open(host);
+	assert.strictEqual(offline.libraryUrl('stale.js'), '/lib/stale.js', 'cached copy reused offline');
+	offline.dispose();
+	fs.rmSync(scratch, { recursive: true, force: true });
+	console.log('  ✓ /lib/: vendor copy, verified download + cache, wrong hash refused, CDN fallback');
+
+	// Fixed port: the bridge listens where it is told; a taken port fails
+	// open() and the next open() retries
+	const probe = http.createServer();
+	const fixedPort = await listen(probe);
+	const blocked = new VrBridge({ extensionRoot, port: () => fixedPort });
+	await assert.rejects(blocked.open(host), /EADDRINUSE/, 'a taken fixed port fails open()');
+	await new Promise(resolve => probe.close(resolve));
+	const fixed = await blocked.open(host);
+	assert.strictEqual(new URL(fixed.url).port, String(fixedPort), 'listens on the configured port');
+	assert.strictEqual((await get(fixed.url)).status, 200);
+	blocked.dispose();
+	console.log('  ✓ fixed port: configured port, EADDRINUSE then retry\n');
+
 	console.log('=== All Tests Passed ===');
 }
 

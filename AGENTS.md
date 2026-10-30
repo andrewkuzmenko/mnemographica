@@ -719,10 +719,16 @@ The extension helps AI agents:
      `mnemographica.openGraphInVR` command, for the active panel)
      opens the panel's **VR bridge page** in the system browser:
      `src/webview/vrBridge.ts` is a loopback HTTP + WebSocket server
-     (127.0.0.1, free port, started on first use, one per extension
-     host) that registers a session per panel under a random token —
-     page `/vr/<token>`, socket `/ws/<token>`, `media/webview.{js,css}`
-     under `/media/`. The page is the panel's own template
+     (127.0.0.1, started on first use, one per extension host; port
+     `mnemographica.vrBridgePort`, 0 = a free one, a change restarts
+     the bridge and a panel whose token it forgot re-registers) that
+     registers a session per panel under a random token — page
+     `/vr/<token>`, socket `/ws/<token>`, `media/webview.{js,css}`
+     under `/media/`, d3/three under `/lib/` (`VR_LIBRARIES`, pinned
+     versions with sha256: the extension's `vendor/` copy — the OpenIDE
+     port ships one — else a verified one-time download into
+     `globalStorage/vr-lib`; the page falls back to the CDN only when
+     neither exists, `libraryUrl`). The page is the panel's own template
      (`GraphPanel.pageHtml`) with `VR_PAGE_BOOT`, a WebSocket-backed
      `acquireVsCodeApi`, in place of the webview host, and Save/Export
      hidden; it mirrors the panel both ways — `GraphPanel.post` reaches
@@ -732,7 +738,12 @@ The extension helps AI agents:
      openVR are panel-only). Gates: token, Host header (DNS rebinding),
      Origin (cross-site sockets); the page sends no Referer. A closed
      panel closes its pages with `VR_SESSION_CLOSED` and they stop
-     reconnecting. In Chrome/Edge with an OpenXR runtime (Meta Quest
+     reconnecting. The open-in-VR notification also offers an adb
+     command for a Quest on USB without Link (macOS, Linux): `adb
+     reverse` forwards the bridge port, so the same 127.0.0.1 URL — a
+     secure context — opens in Quest Browser (`adb shell am start`
+     with `com.oculus.browser`); a fixed port makes the forward last across
+     editor restarts. In Chrome/Edge with an OpenXR runtime (Meta Quest
      Link) the page enters VR (`enterXR`): graphRoot scales so the
      graph's largest extent is 1.2 m, centred 1.3 m up and 1 m ahead
      (`local-floor`), fog off, captions depth-test (stereo), and
@@ -1195,7 +1206,10 @@ Automated (plain node, no VS Code host):
 - `test/vr-bridge.test.js` — the VR bridge: page and media routes
   (whitelist, no traversal, no-referrer), the token / Host / Origin
   gates, the two-way mirror (per-page replies, session broadcast,
-  non-JSON frames dropped), and `VR_SESSION_CLOSED` on panel close
+  non-JSON frames dropped), `VR_SESSION_CLOSED` on panel close, the
+  `/lib/` libraries (verified vendor copy, wrong-hash copy replaced by
+  a verified cached download, tampered or failed download → CDN, the
+  cache reused offline) and the fixed port (EADDRINUSE, then retry)
 - `test/scene-builder.test.js` — SceneBuilder → Scene3D: the scene
   census (spheres, links by kind, diamonds, bagel anchors, knots,
   captions) for fixtures-v2 and the hand-written fixtures payload, the

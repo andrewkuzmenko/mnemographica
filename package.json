@@ -367,6 +367,13 @@
 					"default": "http://127.0.0.1:3000/strategy/channel",
 					"description": "Default discovery URL for the App Channel tab — an app's self-hosted strategy WS channel (startStrategyClient)"
 				},
+				"mnemographica.vrBridgePort": {
+					"type": "integer",
+					"default": 0,
+					"minimum": 0,
+					"maximum": 65535,
+					"markdownDescription": "Port of the VR bridge (Ψ 3D in VR), on 127.0.0.1. `0` picks a free port at every start; a fixed port lets a Quest reach the bridge over USB with one `adb reverse tcp:<port> tcp:<port>`"
+				},
 				"mnemographica.followTacticaChanges": {
 					"type": "boolean",
 					"default": false,
