@@ -7799,6 +7799,9 @@ window.acquireVsCodeApi = function () {
 			canvas.height = 576;
 			const texture = new THREE.CanvasTexture(canvas);
 			texture.minFilter = THREE.LinearFilter;
+			// The canvas paints sRGB colours — tagged so, the dark card
+			// stays dark instead of washing out to grey
+			texture.colorSpace = THREE.SRGBColorSpace;
 			const card = new THREE.Mesh(
 				new THREE.PlaneGeometry(0.24, 0.135),
 				new THREE.MeshBasicMaterial({ map: texture, transparent: true })
