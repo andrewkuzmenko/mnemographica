@@ -10,6 +10,7 @@ import { buildSceneFor } from '../core/SceneBuilder';
 import type { FrontendRegistry_Scene3D as Scene3D, FrontendRegistry_Scene3D_GraphNode3D as Scene3D_GraphNode3D } from '../../.tactica/types';
 import { getLogger } from '../services/LoggerService';
 import { VSCodeNavigation } from '../services/NavigationAdapter';
+import { VR_PAGE_BOOT, type VrBridge, type VrClient } from './vrBridge';
 
 // Get logger instance once at module level
 const logger = getLogger();
@@ -53,6 +54,18 @@ const cameraDataFromLayout = function (layout: unknown): {
 	return data;
 };
 
+// The commands the host's message switch handles — the guard for
+// messages arriving from VR bridge pages, which are untyped JSON
+const WEBVIEW_COMMANDS = new Set<string>([
+	'goToDefinition', 'ready', 'log', 'viewState', 'pickTrace', 'traceModeExit',
+	'saveLayout', 'refreshGraph', 'selectCollection', 'exportHtml', 'openVR'
+]);
+const isWebviewMessage = function (value: unknown): value is WebviewMessage {
+	const valid = typeof value === 'object' && value !== null &&
+		'command' in value && typeof value.command === 'string' && WEBVIEW_COMMANDS.has(value.command);
+	return valid;
+};
+
 export class GraphPanel {
 	// Panels keyed by .tactica SOURCE ROOT: one tab per project, each
 	// bound for life to the graph it was opened for. Re-invoking on an
@@ -88,6 +101,18 @@ export class GraphPanel {
 	// derives from every pushed GraphData; camera/tooltip/tube update as
 	// view events arrive. queryViewState reports its census.
 	private scene: Scene3D | undefined;
+	// The VR bridge (one per extension host, set by extension.ts) and
+	// this panel's session on it: opened by the 🥽 VR button or the
+	// mnemographica.openGraphInVR command, closed with the panel. Bridge
+	// pages mirror the panel — every post() reaches them too
+	private static vrBridge: VrBridge | null = null;
+	private vr: { token: string; url: string } | null = null;
+	// The last updateGraph posted, for a bridge page that connects later
+	private lastGraphMessage: unknown = null;
+
+	public static setVrBridge (bridge: VrBridge) {
+		GraphPanel.vrBridge = bridge;
+	}
 
 	public static createOrShow (extensionUri: vscode.Uri, sourceRoot: string) {
 		const column = vscode.window.activeTextEditor
@@ -142,7 +167,7 @@ export class GraphPanel {
 			return false;
 		}
 		GraphPanel.pendingFocus = { panel: target, id: data.id, name: data.name };
-		void target.panel.webview.postMessage({
+		target.post({
 			command : 'focusNode',
 			data
 		});
@@ -219,7 +244,7 @@ export class GraphPanel {
 		// The sidebar click is a request to SEE the trace — surface the
 		// panel tab when it sits behind other editors (Wanted #3)
 		current.panel.reveal();
-		void current.panel.webview.postMessage({
+		current.post({
 			command : 'traceModeEnter',
 			data    : { edges: resolved.edges, name }
 		});
@@ -245,7 +270,7 @@ export class GraphPanel {
 		}
 		GraphPanel.traceMode = { edgeId: resolved.selectedId, name };
 		current.panel.reveal();
-		void current.panel.webview.postMessage({
+		current.post({
 			command : 'traceReplay',
 			data    : { edges: resolved.edges, name }
 		});
@@ -265,14 +290,14 @@ export class GraphPanel {
 		if (!current || edges.length === 0) {
 			return false;
 		}
-		void current.panel.webview.postMessage({
+		current.post({
 			command : 'traceEvent',
 			data    : { edges }
 		});
 		if (GraphPanel.traceMode && GraphPanel.traceResolver) {
 			const continuation = GraphPanel.traceResolver.continue(GraphPanel.traceMode.edgeId, edges);
 			if (continuation.length > 0) {
-				void current.panel.webview.postMessage({
+				current.post({
 					command : 'traceModeExtend',
 					data    : { edges: continuation }
 				});
@@ -358,7 +383,7 @@ export class GraphPanel {
 	public static pushUiSettings () {
 		const settings = GraphPanel.readUiSettings();
 		for (const panel of GraphPanel.panels.values()) {
-			void panel.panel.webview.postMessage({
+			panel.post({
 				command : 'settings',
 				data    : settings
 			});
@@ -404,120 +429,7 @@ export class GraphPanel {
 
 		// Handle messages from webview
 		this.panel.webview.onDidReceiveMessage(
-			async (message: WebviewMessage) => {
-				switch (message.command) {
-				case 'goToDefinition':
-					if (message.data &&
-						typeof message.data === 'object' &&
-						'fileName' in message.data &&
-						'line' in message.data &&
-						'column' in message.data) {
-						await this.handleGoToDefinition(message.data as {
-							fileName: string;
-							line: number;
-							column: number;
-						});
-					}
-					break;
-				case 'ready':
-					// Webview is ready — build from the store's entry
-					// (already-loaded projects read NOTHING here). The tab
-					// holds its render afterwards; data changes only via
-					// the Refresh button or the follow opt-in
-					await this.reloadGraph();
-					// Flush a focus request that predated the webview load
-					// (Show on Graph opened the panel just now)
-					if (GraphPanel.pendingFocus && GraphPanel.pendingFocus.panel === this) {
-						const pending = GraphPanel.pendingFocus;
-						GraphPanel.pendingFocus = null;
-						void this.panel.webview.postMessage({
-							command : 'focusNode',
-							data    : { id: pending.id, name: pending.name }
-						});
-					}
-					break;
-				case 'refreshGraph':
-					// The Refresh button: reload THIS panel's project entry
-					// from disk (in place — the sidebar sees it too) and
-					// rebuild
-					await this.reloadGraph(true);
-					break;
-				case 'selectCollection':
-					// The collection selector: one universe per render —
-					// record the pick and rebuild from the ALREADY-LOADED
-					// store entry — zero file reads
-					if (message.data && typeof message.data === 'object' && 'id' in message.data) {
-						this.currentCollection = String(message.data.id);
-						await this.reloadGraph();
-					}
-					break;
-				case 'log':
-					// Forward webview logs to LoggerService
-					if (message.data &&
-						typeof message.data === 'object' &&
-						'message' in message.data) {
-						const logType = 'type' in message.data ? String(message.data.type) : 'info';
-						const logMsg = String(message.data.message);
-						if (logType === 'error') {
-							logger.error('[Webview]', logMsg);
-						} else if (logType === 'warn') {
-							logger.warn('[Webview]', logMsg);
-						} else {
-							logger.info('[Webview]', logMsg);
-						}
-					}
-					break;
-				case 'viewState':
-					// Response to a queryViewState roundtrip (B1.3 state
-					// readback) — resolve the pending request by id
-					if (message.data && typeof message.data === 'object' && 'requestId' in message.data) {
-						const requestId = Number(message.data.requestId);
-						const pending = GraphPanel.viewStateRequests.get(requestId);
-						if (pending) {
-							GraphPanel.viewStateRequests.delete(requestId);
-							clearTimeout(pending.timer);
-							pending.resolve(message.data);
-						}
-						this.noteViewState(message.data);
-					}
-					break;
-				case 'pickTrace': {
-					// Trace mode: user clicked a sphere with live trace
-					// activity — resolve the lineage and open the isolated
-					// path view in the webview
-					if (message.data && typeof message.data === 'object' && 'name' in message.data) {
-						const name = String(message.data.name);
-						const resolved = GraphPanel.traceResolver ? GraphPanel.traceResolver.resolve(name) : null;
-						if (resolved) {
-							GraphPanel.traceMode = { edgeId: resolved.selectedId, name };
-							void this.panel.webview.postMessage({
-								command : 'traceModeEnter',
-								data    : { edges: resolved.edges, name }
-							});
-						}
-					}
-					break;
-				}
-				case 'saveLayout':
-					// The Save button: the webview cannot write files —
-					// it posts the collected layout here and the host
-					// persists it
-					await this.handleSaveLayout(message.data);
-					break;
-				case 'exportHtml':
-					// The Export button: the webview assembled a
-					// self-contained page (its own script + stylesheet +
-					// three/d3 + the current graph and arrangement
-					// inlined) — the host only writes the file
-					if (typeof message.data === 'string' && message.data.length > 0) {
-						await this.handleExportHtml(message.data);
-					}
-					break;
-				case 'traceModeExit':
-					GraphPanel.traceMode = null;
-					break;
-				}
-			},
+			(message: WebviewMessage) => this.handleMessage(message, null),
 			null,
 			this.disposables
 		);
@@ -537,6 +449,144 @@ export class GraphPanel {
 		// The follow watcher is a global persisted setting — apply it at
 		// birth so a panel opened mid-session matches the others
 		this.setFollowTactica(vscode.workspace.getConfiguration('mnemographica').get<boolean>('followTacticaChanges', false));
+	}
+
+	// One handler for the panel's own webview (client null) and its VR
+	// bridge pages (client = the page): bridge pages share the panel's
+	// data and navigation, never its file writes or view readback
+	private async handleMessage (message: WebviewMessage, client: VrClient | null) {
+		switch (message.command) {
+		case 'goToDefinition':
+			if (message.data &&
+				typeof message.data === 'object' &&
+				'fileName' in message.data &&
+				'line' in message.data &&
+				'column' in message.data) {
+				await this.handleGoToDefinition(message.data as {
+					fileName: string;
+					line: number;
+					column: number;
+				});
+			}
+			break;
+		case 'ready':
+			if (client) {
+				// A bridge page joins the panel's current graph; it
+				// builds from the store only when the panel has none yet
+				if (this.lastGraphMessage) {
+					client.post(this.lastGraphMessage);
+				} else {
+					await this.reloadGraph();
+				}
+				break;
+			}
+			// Webview is ready — build from the store's entry
+			// (already-loaded projects read NOTHING here). The tab
+			// holds its render afterwards; data changes only via
+			// the Refresh button or the follow opt-in
+			await this.reloadGraph();
+			// Flush a focus request that predated the webview load
+			// (Show on Graph opened the panel just now)
+			if (GraphPanel.pendingFocus && GraphPanel.pendingFocus.panel === this) {
+				const pending = GraphPanel.pendingFocus;
+				GraphPanel.pendingFocus = null;
+				this.post({
+					command : 'focusNode',
+					data    : { id: pending.id, name: pending.name }
+				});
+			}
+			break;
+		case 'refreshGraph':
+			// The Refresh button: reload THIS panel's project entry
+			// from disk (in place — the sidebar sees it too) and
+			// rebuild
+			await this.reloadGraph(true);
+			break;
+		case 'selectCollection':
+			// The collection selector: one universe per render —
+			// record the pick and rebuild from the ALREADY-LOADED
+			// store entry — zero file reads
+			if (message.data && typeof message.data === 'object' && 'id' in message.data) {
+				this.currentCollection = String(message.data.id);
+				await this.reloadGraph();
+			}
+			break;
+		case 'log':
+			// Forward webview logs to LoggerService
+			if (message.data &&
+				typeof message.data === 'object' &&
+				'message' in message.data) {
+				const logType = 'type' in message.data ? String(message.data.type) : 'info';
+				const logMsg = String(message.data.message);
+				if (logType === 'error') {
+					logger.error('[Webview]', logMsg);
+				} else if (logType === 'warn') {
+					logger.warn('[Webview]', logMsg);
+				} else {
+					logger.info('[Webview]', logMsg);
+				}
+			}
+			break;
+		case 'viewState':
+			// Response to a queryViewState roundtrip (B1.3 state
+			// readback) — resolve the pending request by id. Only the
+			// panel is queried
+			if (!client && message.data && typeof message.data === 'object' && 'requestId' in message.data) {
+				const requestId = Number(message.data.requestId);
+				const pending = GraphPanel.viewStateRequests.get(requestId);
+				if (pending) {
+					GraphPanel.viewStateRequests.delete(requestId);
+					clearTimeout(pending.timer);
+					pending.resolve(message.data);
+				}
+				this.noteViewState(message.data);
+			}
+			break;
+		case 'pickTrace': {
+			// Trace mode: user clicked a sphere with live trace
+			// activity — resolve the lineage and open the isolated
+			// path view in the webview
+			if (message.data && typeof message.data === 'object' && 'name' in message.data) {
+				const name = String(message.data.name);
+				const resolved = GraphPanel.traceResolver ? GraphPanel.traceResolver.resolve(name) : null;
+				if (resolved) {
+					GraphPanel.traceMode = { edgeId: resolved.selectedId, name };
+					this.post({
+						command : 'traceModeEnter',
+						data    : { edges: resolved.edges, name }
+					});
+				}
+			}
+			break;
+		}
+		case 'saveLayout':
+			// The Save button: the webview cannot write files —
+			// it posts the collected layout here and the host
+			// persists it. Bridge pages have no Save
+			if (!client) {
+				await this.handleSaveLayout(message.data);
+			}
+			break;
+		case 'exportHtml':
+			// The Export button: the webview assembled a
+			// self-contained page (its own script + stylesheet +
+			// three/d3 + the current graph and arrangement
+			// inlined) — the host only writes the file
+			if (!client && typeof message.data === 'string' && message.data.length > 0) {
+				await this.handleExportHtml(message.data);
+			}
+			break;
+		case 'openVR':
+			// The panel's 🥽 VR button: the editor webview cannot enter
+			// VR itself — serve this graph to the system browser
+			if (!client) {
+				await this.openInVR();
+			}
+			break;
+		case 'traceModeExit':
+			GraphPanel.traceMode = null;
+			break;
+		}
 	}
 
 	// (Re)build THIS panel's graph from the registryStore's entry for its
@@ -579,12 +629,72 @@ export class GraphPanel {
 		if (cameraData) {
 			this.scene.camera = new this.scene.Camera3D(cameraData);
 		}
-		void this.panel.webview.postMessage({
+		const message = {
 			command  : 'updateGraph',
 			data     : graphData,
 			layout   : layout,
 			settings : GraphPanel.readUiSettings()
-		});
+		};
+		this.lastGraphMessage = message;
+		this.post(message);
+	}
+
+	// Post to the panel's webview and to every VR bridge page mirroring it
+	private post (message: unknown) {
+		void this.panel.webview.postMessage(message);
+		if (this.vr && GraphPanel.vrBridge) {
+			GraphPanel.vrBridge.broadcast(this.vr.token, message);
+		}
+	}
+
+	/**
+	 * Open the active panel's graph in the system browser for VR (the
+	 * mnemographica.openGraphInVR command). Returns false when no panel
+	 * is open.
+	 */
+	public static async openActiveInVR (): Promise<boolean> {
+		const target = GraphPanel.activeTarget();
+		if (!target) {
+			return false;
+		}
+		await target.openInVR();
+		return true;
+	}
+
+	// Serve this panel through the VR bridge (one session per panel,
+	// reused) and open the page in the system browser. WebXR there needs
+	// Chrome or Edge with an OpenXR runtime (Meta Quest Link) — the
+	// notification carries the URL for when the default browser is not
+	private async openInVR () {
+		const bridge = GraphPanel.vrBridge;
+		if (!bridge) {
+			return;
+		}
+		if (!this.vr) {
+			try {
+				this.vr = await bridge.open({
+					pageHtml  : () => this.getVrPageContent(),
+					onMessage : (client, message) => {
+						if (isWebviewMessage(message)) {
+							void this.handleMessage(message, client);
+						}
+					}
+				});
+			} catch (error) {
+				void vscode.window.showErrorMessage(`Could not start the VR bridge: ${String(error)}`);
+				return;
+			}
+		}
+		const url = this.vr.url;
+		logger.info(`[GraphPanel] VR page for ${this.sourceName}: ${url}`);
+		await vscode.env.openExternal(vscode.Uri.parse(url));
+		const copy = await vscode.window.showInformationMessage(
+			`Ψ ${this.sourceName} opened in the browser for VR — Chrome or Edge with Meta Quest Link as the active OpenXR runtime, then 🥽 Enter VR.`,
+			'Copy URL'
+		);
+		if (copy) {
+			await vscode.env.clipboard.writeText(url);
+		}
 	}
 
 	// The Save button's backing file (per-source): the arrangement
@@ -749,10 +859,23 @@ export class GraphPanel {
 			.replace(configScript, '<script>\n/*__MNEMO_BOOT__*/\n</script>');
 	}
 
-	private getWebviewContent (extensionUri: vscode.Uri): string {
-		const config = vscode.workspace.getConfiguration('mnemographica');
-		const showProperties = config.get<boolean>('showProperties', true);
+	// D3.js and Three.js from the CDN — the panel, the export and the VR
+	// bridge page all load the same two
+	private static readonly D3_URI = 'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js';
+	private static readonly THREE_URI = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
 
+	// The config script the app reads (SHOW_PROPERTIES). One exact string
+	// so the export skeleton can swap it for the boot stub by exact match
+	private static configScript (): string {
+		const showProperties = vscode.workspace.getConfiguration('mnemographica').get<boolean>('showProperties', true);
+		const script = `<script>
+		// Pass configuration to the webview script
+		const SHOW_PROPERTIES_PLACEHOLDER = ${showProperties};
+	</script>`;
+		return script;
+	}
+
+	private getWebviewContent (extensionUri: vscode.Uri): string {
 		// Get URIs for local resources
 		const styleUri = this.panel.webview.asWebviewUri(
 			vscode.Uri.joinPath(extensionUri, 'media', 'webview.css')
@@ -760,19 +883,7 @@ export class GraphPanel {
 		const scriptUri = this.panel.webview.asWebviewUri(
 			vscode.Uri.joinPath(extensionUri, 'media', 'webview.js')
 		);
-
-		// D3.js CDN
-		const d3Uri = 'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js';
-		// Three.js CDN
-		const threeUri = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
-
-		// The config script the app reads (SHOW_PROPERTIES). Served as a
-		// constant so the export skeleton can swap it for the boot stub by
-		// exact match — one template, no duplicated markup
-		const configScript = `<script>
-		// Pass configuration to the webview script
-		const SHOW_PROPERTIES_PLACEHOLDER = ${showProperties};
-	</script>`;
+		const configScript = GraphPanel.configScript();
 
 		// The export page is THIS page with every external resource swapped
 		// for an inline placeholder the webview fills at export time (see
@@ -780,16 +891,42 @@ export class GraphPanel {
 		// and arrangement — assembles the file; the host only writes it.
 		// The skeleton derives from the very HTML served here, so the
 		// export can never drift from the page it packs
-		const withSkeletonSlot = `<!DOCTYPE html>
+		const withSkeletonSlot = GraphPanel.pageHtml(String(styleUri), String(scriptUri), configScript, '');
+		const skeleton = this.buildExportSkeleton(
+			withSkeletonSlot, String(styleUri), GraphPanel.D3_URI, GraphPanel.THREE_URI, String(scriptUri), configScript
+		);
+		const skeletonScript = `\t<script>\n\t\twindow.__MNEMO_EXPORT_SKELETON__ = ${JSON.stringify(skeleton).replace(/</g, '\\u003c')};\n\t</script>`;
+		const result = withSkeletonSlot.replace('<!--__MNEMO_SKELETON_SCRIPT__-->', () => skeletonScript);
+		return result;
+	}
+
+	// The VR bridge's copy of the page: same template, resources from the
+	// bridge's /media/ route, and the WebSocket boot (VR_PAGE_BOOT) in
+	// place of the webview host. No export skeleton, no Save or Export —
+	// the bridge page writes nothing
+	private getVrPageContent (): string {
+		const head = `	<style>#save-layout,#export-html{display:none}</style>
+	<script>${VR_PAGE_BOOT}
+	</script>
+`;
+		const page = GraphPanel.pageHtml('/media/webview.css', '/media/webview.js', GraphPanel.configScript(), head)
+			.replace('<!--__MNEMO_SKELETON_SCRIPT__-->', '');
+		return page;
+	}
+
+	// The graph page template. `head` lands at the end of <head>, before
+	// any app script runs
+	private static pageHtml (styleUri: string, scriptUri: string, configScript: string, head: string): string {
+		const page = `<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Mnemonica Graph</title>
-	<link rel="stylesheet" href="${String(styleUri)}">
-	<script src="${d3Uri}"></script>
-	<script src="${threeUri}"></script>
-</head>
+	<link rel="stylesheet" href="${styleUri}">
+	<script src="${GraphPanel.D3_URI}"></script>
+	<script src="${GraphPanel.THREE_URI}"></script>
+${head}</head>
 <body>
 	<!-- the collection selector pins to the top-LEFT corner, away from
 	     the top-right button bar -->
@@ -801,6 +938,8 @@ export class GraphPanel {
 		<button id="refresh-graph" title="Re-read this project's .tactica and rebuild the graph">⟳ Refresh</button>
 		<button id="save-layout" title="Save layout to .mnemographica/layout.json">💾 Save</button>
 		<button id="export-html" title="Export the current graph as a single self-contained HTML page (embeddable in slides, works offline)">⤓ Export</button>
+		<!-- shown by webview.js once it knows what VR this page can do -->
+		<button id="vr-mode" style="display:none">🥽 VR</button>
 	</div>
 	<div id="gen-controls" style="display: block;">
 		<div class="gen-controls-header" id="gen-controls-header"><span>Layers &amp; Distances</span><span id="gen-controls-toggle">▾</span></div>
@@ -832,16 +971,10 @@ export class GraphPanel {
 
 	<!--__MNEMO_SKELETON_SCRIPT__-->
 	${configScript}
-	<script src="${String(scriptUri)}"></script>
+	<script src="${scriptUri}"></script>
 </body>
 </html>`;
-
-		const skeleton = this.buildExportSkeleton(
-			withSkeletonSlot, String(styleUri), d3Uri, threeUri, String(scriptUri), configScript
-		);
-		const skeletonScript = `\t<script>\n\t\twindow.__MNEMO_EXPORT_SKELETON__ = ${JSON.stringify(skeleton).replace(/</g, '\\u003c')};\n\t</script>`;
-		const result = withSkeletonSlot.replace('<!--__MNEMO_SKELETON_SCRIPT__-->', () => skeletonScript);
-		return result;
+		return page;
 	}
 
 	public dispose () {
@@ -851,6 +984,11 @@ export class GraphPanel {
 		}
 		GraphPanel.traceMode = null;
 		this.scene = undefined;
+		if (this.vr && GraphPanel.vrBridge) {
+			GraphPanel.vrBridge.close(this.vr.token);
+		}
+		this.vr = null;
+		this.lastGraphMessage = null;
 
 		this.panel.dispose();
 

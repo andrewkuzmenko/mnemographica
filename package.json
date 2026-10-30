@@ -47,6 +47,11 @@
 				"category": "Mnemonica"
 			},
 			{
+				"command": "mnemographica.openGraphInVR",
+				"title": "Ψ 3D in VR (browser + WebXR)",
+				"category": "Mnemonica"
+			},
+			{
 				"command": "mnemographica.refreshGraph",
 				"title": "Refresh Type Graph",
 				"category": "Mnemonica",
@@ -189,6 +194,9 @@
 			"commandPalette": [
 				{
 					"command": "mnemographica.showTypeGraph"
+				},
+				{
+					"command": "mnemographica.openGraphInVR"
 				},
 				{
 					"command": "mnemographica.refreshGraph"
@@ -388,7 +396,7 @@
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src",
-		"test": "node test/registry-loading.test.js && node test/types-model.test.js && node test/trace-ingest.test.js && node test/logger-channel.test.js && node test/graph-builder.test.js && node test/collections.test.js && node test/scene-builder.test.js && node test/registry-store.test.js",
+		"test": "node test/registry-loading.test.js && node test/types-model.test.js && node test/trace-ingest.test.js && node test/logger-channel.test.js && node test/graph-builder.test.js && node test/collections.test.js && node test/scene-builder.test.js && node test/registry-store.test.js && node test/vr-bridge.test.js",
 		"package": "vsce package",
 		"tactica:generate": "tactica --generate --verbose",
 		"tactica:watch": "tactica --watch"

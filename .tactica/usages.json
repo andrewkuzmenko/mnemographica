@@ -1,6 +1,6 @@
 {
   "version": "1.2",
-  "generatedAt": "2026-10-18T23:57:47.169Z",
+  "generatedAt": "2026-10-30T17:14:54.493Z",
   "usages": {
     "LoggerTab": [
       {
@@ -54,17 +54,17 @@
         "holderScopeId": "src/core/MainOrchestrator.ts:61:2"
       },
       {
-        "location": "src/extension.ts:317:24",
+        "location": "src/extension.ts:318:24",
         "kind": "lookup",
         "code": "lookup('Registry')",
-        "holderScopeId": "src/extension.ts:313:45"
+        "holderScopeId": "src/extension.ts:314:45"
       },
       {
-        "location": "src/extension.ts:318:58",
+        "location": "src/extension.ts:319:58",
         "kind": "instantiation",
         "code": "new RegistryType()",
         "constructorText": "RegistryType",
-        "holderScopeId": "src/extension.ts:313:45"
+        "holderScopeId": "src/extension.ts:314:45"
       }
     ],
     "Main": [
@@ -238,52 +238,52 @@
     ],
     "collection_2::Scene3D.Camera3D": [
       {
-        "location": "src/webview/panel.ts:580:24",
+        "location": "src/webview/panel.ts:630:24",
         "kind": "instantiation",
         "code": "new this.scene.Camera3D(cameraData)",
         "constructorText": "this.scene.Camera3D",
-        "holderScopeId": "src/webview/panel.ts:571:2"
+        "holderScopeId": "src/webview/panel.ts:621:2"
       },
       {
-        "location": "src/webview/panel.ts:633:25",
+        "location": "src/webview/panel.ts:743:25",
         "kind": "instantiation",
         "code": "new this.scene.Camera3D(cameraData)",
         "constructorText": "this.scene.Camera3D",
-        "holderScopeId": "src/webview/panel.ts:625:2"
+        "holderScopeId": "src/webview/panel.ts:735:2"
       },
       {
-        "location": "src/webview/panel.ts:699:19",
+        "location": "src/webview/panel.ts:809:19",
         "kind": "instantiation",
         "code": "new scene.Camera3D({\n\t\t\t\tx         : finiteOrZero(cam.pan?.x),\n\t\t\t\ty         : finiteOrZero(cam.pan?",
         "constructorText": "scene.Camera3D",
-        "holderScopeId": "src/webview/panel.ts:690:2"
+        "holderScopeId": "src/webview/panel.ts:800:2"
       }
     ],
     "collection_2::Scene3D.Tube3D": [
       {
-        "location": "src/webview/panel.ts:679:16",
+        "location": "src/webview/panel.ts:789:16",
         "kind": "instantiation",
         "code": "new scene.Tube3D({ id, chain })",
         "constructorText": "scene.Tube3D",
-        "holderScopeId": "src/webview/panel.ts:672:2"
+        "holderScopeId": "src/webview/panel.ts:782:2"
       }
     ],
     "collection_2::Scene3D.GraphNode3D.Tooltip3D": [
       {
-        "location": "src/webview/panel.ts:682:20",
+        "location": "src/webview/panel.ts:792:20",
         "kind": "instantiation",
         "code": "new sphere.Tooltip3D({ targetNode: id, content: name, visible: true })",
         "constructorText": "sphere.Tooltip3D",
-        "holderScopeId": "src/webview/panel.ts:672:2"
+        "holderScopeId": "src/webview/panel.ts:782:2"
       }
     ],
     "collection_1::Trie.GraphNodeTrie.ContextMenu": [
       {
-        "location": "src/extension.ts:222:18",
+        "location": "src/extension.ts:223:18",
         "kind": "instantiation",
         "code": "new (trieNode as Trie_GraphNodeTrie).ContextMenu({\n\t\t\t\t\ttargetNode : id,\n\t\t\t\t\titems      : [\n\t\t\t\t\t\t{",
         "constructorText": "(trieNode as Trie_GraphNodeTrie).ContextMenu",
-        "holderScopeId": "src/extension.ts:198:64"
+        "holderScopeId": "src/extension.ts:199:64"
       }
     ],
     "collection_1::Definitions": [

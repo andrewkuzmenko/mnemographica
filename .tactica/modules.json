@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-10-18T23:57:47.184Z",
+  "generatedAt": "2026-10-30T17:14:54.517Z",
   "modules": {
     "src/topologica/bootstrap.ts": {
       "filePath": "src/topologica/bootstrap.ts",
@@ -1672,6 +1672,69 @@
       "unresolvedSpecifiers": [],
       "builtinSpecifiers": []
     },
+    "src/webview/vrBridge.ts": {
+      "filePath": "src/webview/vrBridge.ts",
+      "definedTypes": [],
+      "exportedBindings": [
+        {
+          "name": "VrClient",
+          "kind": "type",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "isReExport": false
+        },
+        {
+          "name": "VrSessionHost",
+          "kind": "type",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "isReExport": false
+        },
+        {
+          "name": "VR_SESSION_CLOSED",
+          "kind": "const",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "isReExport": false
+        },
+        {
+          "name": "VR_PAGE_BOOT",
+          "kind": "const",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "isReExport": false
+        },
+        {
+          "name": "VrBridge",
+          "kind": "class",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "isReExport": false
+        }
+      ],
+      "importedBindings": [
+        {
+          "name": "ws",
+          "kind": "unknown",
+          "sourceModule": "node_modules/@types/ws/index.d.ts",
+          "importKind": "namespace",
+          "isReExport": false,
+          "external": true
+        },
+        {
+          "name": "WebSocket",
+          "kind": "unknown",
+          "sourceModule": "node_modules/@types/ws/index.d.ts",
+          "importKind": "named",
+          "isReExport": false,
+          "external": true
+        }
+      ],
+      "dependencies": [],
+      "unresolvedSpecifiers": [],
+      "builtinSpecifiers": [
+        "crypto",
+        "fs",
+        "http",
+        "path",
+        "stream"
+      ]
+    },
     "src/webview/panel.ts": {
       "filePath": "src/webview/panel.ts",
       "definedTypes": [],
@@ -1784,6 +1847,27 @@
           "sourceModule": "src/services/NavigationAdapter.ts",
           "importKind": "named",
           "isReExport": false
+        },
+        {
+          "name": "VR_PAGE_BOOT",
+          "kind": "const",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "importKind": "named",
+          "isReExport": false
+        },
+        {
+          "name": "VrBridge",
+          "kind": "class",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "importKind": "named",
+          "isReExport": false
+        },
+        {
+          "name": "VrClient",
+          "kind": "type",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "importKind": "named",
+          "isReExport": false
         }
       ],
       "dependencies": [
@@ -1794,7 +1878,8 @@
         "src/utils/paths.ts",
         "src/core/SceneBuilder.ts",
         "src/services/LoggerService.ts",
-        "src/services/NavigationAdapter.ts"
+        "src/services/NavigationAdapter.ts",
+        "src/webview/vrBridge.ts"
       ],
       "unresolvedSpecifiers": [],
       "builtinSpecifiers": [
@@ -2687,6 +2772,13 @@
           "isReExport": false
         },
         {
+          "name": "VrBridge",
+          "kind": "class",
+          "sourceModule": "src/webview/vrBridge.ts",
+          "importKind": "named",
+          "isReExport": false
+        },
+        {
           "name": "StrategyPanel",
           "kind": "class",
           "sourceModule": "src/webview/strategyPanel.ts",
@@ -2808,6 +2900,7 @@
         "src/topologica/bootstrap.ts",
         "src/core/MainOrchestrator.ts",
         "src/webview/panel.ts",
+        "src/webview/vrBridge.ts",
         "src/webview/strategyPanel.ts",
         "src/webview/appChannelPanel.ts",
         "src/strategy/processManager.ts",

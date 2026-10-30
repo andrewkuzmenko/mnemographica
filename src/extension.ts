@@ -17,6 +17,7 @@ import { loadModels, modelsLoaded } from './topologica/bootstrap';
 import { MainOrchestrator, traceEdge } from './core/MainOrchestrator';
 import type { BackendRegistry_Trie_GraphNodeTrie as Trie_GraphNodeTrie, Registry as RegistryModel } from '../.tactica/types';
 import { GraphPanel } from './webview/panel';
+import { VrBridge } from './webview/vrBridge';
 import { StrategyPanel } from './webview/strategyPanel';
 import { AppChannelPanel } from './webview/appChannelPanel';
 import { stopStrategyProcess } from './strategy/processManager';
@@ -541,6 +542,22 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			logger.info(`[Extension] Opening 3D graph for ${sourceRoot}`);
 			GraphPanel.createOrShow(context.extensionUri, sourceRoot);
+		})
+	);
+	// The VR bridge serves graph panels to the system browser, where
+	// WebXR reaches the headset; it listens only once a panel opens VR
+	const vrBridge = new VrBridge(
+		vscode.Uri.joinPath(context.extensionUri, 'media').fsPath,
+		(message) => logger.info(message)
+	);
+	GraphPanel.setVrBridge(vrBridge);
+	context.subscriptions.push(vrBridge);
+	context.subscriptions.push(
+		vscode.commands.registerCommand('mnemographica.openGraphInVR', async () => {
+			const opened = await GraphPanel.openActiveInVR();
+			if (!opened) {
+				vscode.window.showInformationMessage('Open the Ψ 3D graph first — VR shows the graph of the active panel.');
+			}
 		})
 	);
 	context.subscriptions.push(
