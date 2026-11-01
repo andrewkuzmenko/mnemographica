@@ -14,7 +14,7 @@ const http = require('http');
 const os = require('os');
 const path = require('path');
 const WebSocket = require('ws');
-const { VrBridge, VR_SESSION_CLOSED } = require('../out/src/webview/vrBridge');
+const { VrBridge, VR_SESSION_CLOSED, questAdbSteps, questAdbCommand } = require('../out/src/webview/vrBridge');
 
 const extensionRoot = path.join(__dirname, '..');
 const host = { pageHtml: () => '<!DOCTYPE html>', onMessage: () => {} };
@@ -181,8 +181,33 @@ async function runTests () {
 	await offline.open(host);
 	assert.strictEqual(offline.libraryUrl('stale.js'), '/lib/stale.js', 'cached copy reused offline');
 	offline.dispose();
-	fs.rmSync(scratch, { recursive: true, force: true });
 	console.log('  ✓ /lib/: vendor copy, verified download + cache, wrong hash refused, CDN fallback');
+
+	// A stalled CDN never holds open() past libraryWaitMs, concurrent
+	// opens share ONE download, and the download timeout ends the stall
+	let stalledRequests = 0;
+	const stalledCdn = http.createServer(() => { stalledRequests++; });
+	const stalledPort = await listen(stalledCdn);
+	const slow = new VrBridge({
+		extensionRoot  : libRoot,
+		cacheDir       : path.join(scratch, 'slow-cache'),
+		libraryWaitMs  : 200,
+		fetchTimeoutMs : 600,
+		libraries      : [{ name: 'slow.js', url: `http://127.0.0.1:${stalledPort}/slow.js`, sha256: sha256('slow();') }]
+	});
+	const openedAt = Date.now();
+	await Promise.all([slow.open(host), slow.open(host)]);
+	assert.ok(Date.now() - openedAt < 550, 'open() returns after libraryWaitMs while the download stalls');
+	assert.strictEqual(slow.libraryUrl('slow.js'), null, 'the page uses the CDN meanwhile');
+	assert.strictEqual(stalledRequests, 1, 'concurrent opens share one download');
+	await new Promise(resolve => setTimeout(resolve, 800));
+	await slow.open(host);
+	assert.strictEqual(stalledRequests, 2, 'the timed-out download is retried by the next open()');
+	slow.dispose();
+	stalledCdn.closeAllConnections();
+	stalledCdn.close();
+	fs.rmSync(scratch, { recursive: true, force: true });
+	console.log('  ✓ /lib/: a stalled download never blocks open(), one download at a time, timeout');
 
 	// Fixed port: the bridge listens where it is told; a taken port fails
 	// open() and the next open() retries
@@ -195,7 +220,19 @@ async function runTests () {
 	assert.strictEqual(new URL(fixed.url).port, String(fixedPort), 'listens on the configured port');
 	assert.strictEqual((await get(fixed.url)).status, 200);
 	blocked.dispose();
-	console.log('  ✓ fixed port: configured port, EADDRINUSE then retry\n');
+	console.log('  ✓ fixed port: configured port, EADDRINUSE then retry');
+
+	// Quest on USB: argv steps for a shell-free run, and paste-able text
+	// with one command per line — no `&&`, no quotes (PowerShell 5.1 safe)
+	const questUrl = 'http://127.0.0.1:9240/vr/ab12';
+	assert.deepStrictEqual(questAdbSteps(questUrl), [
+		['reverse', 'tcp:9240', 'tcp:9240'],
+		['shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', questUrl, 'com.oculus.browser']
+	]);
+	const pasted = questAdbCommand(questUrl);
+	assert.strictEqual(pasted.split('\n').length, 2, 'one command per line');
+	assert.ok(!/&&|'|"/.test(pasted), 'no shell-specific syntax');
+	console.log('  ✓ Quest adb steps: argv for execFile, paste-able in any shell\n');
 
 	console.log('=== All Tests Passed ===');
 }

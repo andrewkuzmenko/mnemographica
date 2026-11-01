@@ -412,9 +412,14 @@ The extension helps AI agents:
      kinds) carry no per-edge object: their position writers emit
      DEGENERATE vertices (zero-length rasterizes nothing) for a
      pair whose endpoints read hidden, and the writer-owned
-     arrowheads (holder connectors, call arrows, fiber arrows) fold
-     the same `pair.from.visible && pair.to.visible` read into
-     their length test — visibility decided in the regular update
+     arrowheads (holder connectors, fiber arrows) fold the same
+     `pair.from.visible && pair.to.visible` read into their length
+     test. The call-edge arrowheads are ONE `InstancedMesh` (a real
+     callers graph has thousands of call edges — a mesh each was
+     most of the scene's draw calls, doubled per eye in VR): a
+     hidden arrow writes a ZERO-SCALE instance matrix, the
+     instanced twin of the degenerate vertex, and the batch is not
+     frustum-culled (its instances move) — visibility decided in the regular update
      pass, never by a flip-time walk. The checkbox handler is
      `sessionGenVisibility.set` + ONE `updateLinkPositions()` +
      `needsRender`: the panel does not rebuild, the layout does not
@@ -728,7 +733,13 @@ The extension helps AI agents:
      versions with sha256: the extension's `vendor/` copy — the OpenIDE
      port ships one — else a verified one-time download into
      `globalStorage/vr-lib`; the page falls back to the CDN only when
-     neither exists, `libraryUrl`). The page is the panel's own template
+     neither exists, `libraryUrl`). The download never holds the click
+     up: `open()` waits at most `VR_LIBRARY_WAIT_MS` (3 s) for it, each
+     fetch times out after `VR_LIBRARY_FETCH_TIMEOUT_MS`, concurrent
+     opens share ONE pass (no two writers on a `.part` file), and a
+     pass that leaves a library missing is retried by the next open;
+     `pageHtml` runs per page request, so a page requested after the
+     download lands points at `/lib/`. The page is the panel's own template
      (`GraphPanel.pageHtml`) with `VR_PAGE_BOOT`, a WebSocket-backed
      `acquireVsCodeApi`, in place of the webview host, and Save/Export
      hidden; it mirrors the panel both ways — `GraphPanel.post` reaches
@@ -738,12 +749,27 @@ The extension helps AI agents:
      openVR are panel-only). Gates: token, Host header (DNS rebinding),
      Origin (cross-site sockets); the page sends no Referer. A closed
      panel closes its pages with `VR_SESSION_CLOSED` and they stop
-     reconnecting. The open-in-VR notification also offers an adb
-     command for a Quest on USB without Link (macOS, Linux): `adb
-     reverse` forwards the bridge port, so the same 127.0.0.1 URL — a
-     secure context — opens in Quest Browser (`adb shell am start`
-     with `com.oculus.browser`); a fixed port makes the forward last across
-     editor restarts. In Chrome/Edge with an OpenXR runtime (Meta Quest
+     reconnecting. For a Quest on USB without Link (any OS) the
+     open-in-VR notification offers **Open on Quest (adb)** and **Copy
+     adb command**, both built from `questAdbSteps`: `adb reverse`
+     forwards the bridge port, so the same 127.0.0.1 URL — a secure
+     context — opens in Quest Browser (`adb shell am start` with
+     `com.oculus.browser`). The button runs the steps through
+     `execFile` (no shell; adb missing or a failing step is reported);
+     the copied text (`questAdbCommand`) is one command per line with
+     no `&&` and no quotes, so cmd, PowerShell 5.1 and POSIX shells all
+     paste it as-is. A fixed port makes the forward last across editor
+     restarts. Entering VR reports progress on the button and status
+     line (`toggleVr`): the button disables to "Entering VR…" while
+     `requestSession` is pending (a second click is ignored, not a
+     second request — Quest Link has taken 30–45 s), a hint follows
+     after `XR_SLOW_REQUEST_MS`, and once in, `startXrWatchdog` reports
+     a VISIBLE session that paints no frame for `XR_NO_FRAMES_MS`
+     (Link was seen reporting FOCUSED while delivering none) — the
+     frame clock is `xr.frames`/`xr.lastFrameAt`, written by
+     `updateXR`; a hidden session (headset off) pauses frames
+     legitimately. The graph's own status line returns when the VR
+     messages end (`restoreVrStatus`). In Chrome/Edge with an OpenXR runtime (Meta Quest
      Link) the page enters VR (`enterXR`): graphRoot scales so the
      graph's largest extent is 1.2 m, centred 1.3 m up and 1 m ahead
      (`local-floor`), fog off, captions depth-test (stereo), and
@@ -1209,7 +1235,11 @@ Automated (plain node, no VS Code host):
   non-JSON frames dropped), `VR_SESSION_CLOSED` on panel close, the
   `/lib/` libraries (verified vendor copy, wrong-hash copy replaced by
   a verified cached download, tampered or failed download → CDN, the
-  cache reused offline) and the fixed port (EADDRINUSE, then retry)
+  cache reused offline; a stalled download never holds `open()` past
+  `libraryWaitMs`, concurrent opens share one download, the timeout
+  lets the next open retry), the fixed port (EADDRINUSE, then retry)
+  and the Quest adb steps (argv for `execFile`, paste-able text with
+  no shell-specific syntax)
 - `test/scene-builder.test.js` — SceneBuilder → Scene3D: the scene
   census (spheres, links by kind, diamonds, bagel anchors, knots,
   captions) for fixtures-v2 and the hand-written fixtures payload, the

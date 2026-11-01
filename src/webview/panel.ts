@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { execFile } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 import type { GraphData, WebviewMessage } from '../types';
@@ -10,7 +11,7 @@ import { buildSceneFor } from '../core/SceneBuilder';
 import type { FrontendRegistry_Scene3D as Scene3D, FrontendRegistry_Scene3D_GraphNode3D as Scene3D_GraphNode3D } from '../../.tactica/types';
 import { getLogger } from '../services/LoggerService';
 import { VSCodeNavigation } from '../services/NavigationAdapter';
-import { VR_PAGE_BOOT, type VrBridge, type VrClient } from './vrBridge';
+import { VR_PAGE_BOOT, questAdbCommand, questAdbSteps, type VrBridge, type VrClient } from './vrBridge';
 
 // Get logger instance once at module level
 const logger = getLogger();
@@ -687,23 +688,45 @@ export class GraphPanel {
 			}
 		}
 		const url = this.vr.url;
-		// Quest Browser over USB: forward the bridge port into the headset
-		// (127.0.0.1 there is a secure context, so WebXR works on plain
-		// http) and open the page in the browser
-		const port = new URL(url).port;
-		const adb = `adb reverse tcp:${port} tcp:${port} && adb shell am start -a android.intent.action.VIEW -d '${url}' com.oculus.browser`;
 		logger.info(`[GraphPanel] VR page for ${this.sourceName}: ${url}`);
 		await vscode.env.openExternal(vscode.Uri.parse(url));
-		const copy = await vscode.window.showInformationMessage(
-			`Ψ ${this.sourceName} opened in the browser for VR: Chrome or Edge with Meta Quest Link, then 🥽 VR. Quest on USB without Link: run the adb command, then 🥽 VR in the headset.`,
+		const choice = await vscode.window.showInformationMessage(
+			`Ψ ${this.sourceName} opened in the browser for VR: Chrome or Edge with Meta Quest Link, then 🥽 VR. Quest on USB without Link: Open on Quest (adb), then 🥽 VR in the headset.`,
+			'Open on Quest (adb)',
 			'Copy URL',
 			'Copy adb command'
 		);
-		if (copy === 'Copy URL') {
+		if (choice === 'Open on Quest (adb)') {
+			await GraphPanel.openOnQuest(url);
+		} else if (choice === 'Copy URL') {
 			await vscode.env.clipboard.writeText(url);
-		} else if (copy === 'Copy adb command') {
-			await vscode.env.clipboard.writeText(adb);
+		} else if (choice === 'Copy adb command') {
+			await vscode.env.clipboard.writeText(questAdbCommand(url));
 		}
+	}
+
+	// Run the adb steps (questAdbSteps) directly — no shell, so no
+	// terminal syntax to get wrong — and report the outcome
+	private static async openOnQuest (url: string) {
+		for (const args of questAdbSteps(url)) {
+			const failure = await new Promise<string | null>(resolve => {
+				execFile('adb', args, { timeout: 15000, windowsHide: true }, (error, _stdout, stderr) => {
+					if (!error) {
+						resolve(null);
+						return;
+					}
+					const missing = 'code' in error && error.code === 'ENOENT';
+					resolve(missing
+						? 'adb was not found on PATH — install the Android platform tools'
+						: (String(stderr).trim() || error.message));
+				});
+			});
+			if (failure) {
+				void vscode.window.showErrorMessage(`Open on Quest failed (adb ${args[0]}): ${failure}. The headset must be on USB in developer mode with USB debugging allowed.`);
+				return;
+			}
+		}
+		void vscode.window.showInformationMessage('The graph is open in the headset\'s browser — press 🥽 VR there.');
 	}
 
 	// The Save button's backing file (per-source): the arrangement

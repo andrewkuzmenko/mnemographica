@@ -153,6 +153,12 @@
 		updateStatusLine();
 	}
 
+	// The last segment of a path — Windows paths arrive with backslashes
+	function fileBaseName(filePath) {
+		const base = String(filePath).split(/[\\/]/).pop();
+		return base;
+	}
+
 	// Initialize when DOM is ready
 	if (document.readyState === 'loading') {
 		document.addEventListener('DOMContentLoaded', init);
@@ -1387,10 +1393,21 @@ window.acquireVsCodeApi = function () {
 
 	// The live WebXR session (toggleVr), null outside VR
 	let xrSession = null;
+	// True while requestSession is pending: the runtime may take tens of
+	// seconds (Quest Link), and a second request would only be rejected
+	let xrRequestPending = false;
+	// The status line the VR messages replace, restored when they end
+	let xrStatusBefore = null;
+	// The no-frames watchdog of the live session (startXrWatchdog)
+	let xrWatchdog = null;
 	// An updateGraph arriving mid-session waits for the session to end:
 	// a rebuild swaps the WebGL renderer, which the session cannot follow.
 	// Only the newest one matters — it replays when VR ends (leaveVr)
 	let deferredGraphUpdate = null;
+	// VR waits: past XR_SLOW_REQUEST_MS the pending request gets a hint,
+	// a visible session without a frame for XR_NO_FRAMES_MS is reported
+	const XR_SLOW_REQUEST_MS = 10000;
+	const XR_NO_FRAMES_MS = 5000;
 
 	async function immersiveVrSupported() {
 		if (!navigator.xr || typeof navigator.xr.isSessionSupported !== 'function') {
@@ -1440,12 +1457,69 @@ window.acquireVsCodeApi = function () {
 		});
 	}
 
+	// VR progress and trouble ride the status line; the graph's own
+	// status comes back once they are over (restoreVrStatus)
+	function showVrStatus(text) {
+		if (xrStatusBefore === null) {
+			xrStatusBefore = lastStatusBase;
+		}
+		setStatusBase(text);
+	}
+
+	function restoreVrStatus() {
+		if (xrStatusBefore !== null) {
+			const before = xrStatusBefore;
+			xrStatusBefore = null;
+			setStatusBase(before);
+		}
+	}
+
+	// A session the runtime accepted can still deliver no frames (Quest
+	// Link was seen reporting FOCUSED while the page got none) — the
+	// headset then shows a hung app and the page looks frozen. While the
+	// session is visible, a frame gap past XR_NO_FRAMES_MS is reported;
+	// a hidden session (headset off) legitimately pauses frames
+	function startXrWatchdog(xrRenderer, session) {
+		stopXrWatchdog();
+		const startedAt = performance.now();
+		let reported = false;
+		xrWatchdog = setInterval(function () {
+			const xr = xrRenderer.xr;
+			if (!xr || session.visibilityState !== 'visible') { return; }
+			const lastFrame = xr.lastFrameAt || startedAt;
+			const stalled = performance.now() - lastFrame > XR_NO_FRAMES_MS;
+			if (stalled && !reported) {
+				reported = true;
+				showVrStatus(xr.frames
+					? 'VR: the headset runtime stopped delivering frames — 🥽 Exit VR, then restart Quest Link or the browser'
+					: 'VR: the session started but the headset runtime delivers no frames — 🥽 Exit VR, then restart Quest Link or the browser');
+			} else if (!stalled && reported) {
+				reported = false;
+				restoreVrStatus();
+			}
+		}, 1000);
+	}
+
+	function stopXrWatchdog() {
+		if (xrWatchdog) {
+			clearInterval(xrWatchdog);
+			xrWatchdog = null;
+		}
+	}
+
 	async function toggleVr(button) {
 		if (xrSession) {
 			await xrSession.end();
 			return;
 		}
-		if (!renderer3D) { return; }
+		if (!renderer3D || xrRequestPending) { return; }
+		xrRequestPending = true;
+		button.disabled = true;
+		button.textContent = '🥽 Entering VR…';
+		showVrStatus('Entering VR — waiting for the headset runtime…');
+		const slowHint = setTimeout(function () {
+			showVrStatus('Still waiting for the VR runtime: is the headset on and awake? With Quest Link, Link must be running and set as the OpenXR runtime');
+		}, XR_SLOW_REQUEST_MS);
 		let session;
 		try {
 			session = await navigator.xr.requestSession('immersive-vr', {
@@ -1453,8 +1527,15 @@ window.acquireVsCodeApi = function () {
 			});
 		} catch (err) {
 			setStatusBase('VR unavailable: ' + (err && err.message ? err.message : String(err)));
+			xrStatusBefore = null;
 			return;
+		} finally {
+			clearTimeout(slowHint);
+			xrRequestPending = false;
+			button.disabled = false;
+			button.textContent = '🥽 VR';
 		}
+		restoreVrStatus();
 		xrSession = session;
 		button.textContent = '🥽 Exit VR';
 		// The renderer that entered owns the exit — three fires
@@ -1467,6 +1548,7 @@ window.acquireVsCodeApi = function () {
 		xrRenderer.renderer.xr.addEventListener('sessionend', onSessionEnd);
 		try {
 			await xrRenderer.enterXR(session);
+			startXrWatchdog(xrRenderer, session);
 		} catch (err) {
 			xrRenderer.renderer.xr.removeEventListener('sessionend', onSessionEnd);
 			leaveVr(xrRenderer, button);
@@ -1476,6 +1558,8 @@ window.acquireVsCodeApi = function () {
 	}
 
 	function leaveVr(xrRenderer, button) {
+		stopXrWatchdog();
+		restoreVrStatus();
 		xrRenderer.exitXR();
 		xrSession = null;
 		button.textContent = '🥽 VR';
@@ -4528,7 +4612,7 @@ window.acquireVsCodeApi = function () {
 				const edsEntries = node.edsEntries || [];
 				const edsRows = edsEntries.map((e, i) => {
 					const site = e.parsedLocation;
-					const siteHint = site ? ' ' + site.fileName.split('/').pop() + ':' + site.line : '';
+					const siteHint = site ? ' ' + fileBaseName(site.fileName) + ':' + site.line : '';
 					const scopeHint = e.scope ? ' [' + (e.scope === 'unknown' ? 'module' : e.scope) + ']' : '';
 					return '<span class="eds-entry" data-eds-index="' + i + '" style="cursor:pointer;text-decoration:underline">' +
 						e.kind + siteHint + scopeHint + '</span>';
@@ -4600,7 +4684,7 @@ window.acquireVsCodeApi = function () {
 				return;
 			}
 			const site = node.location;
-			const siteText = site ? site.fileName.split('/').pop() + ':' + site.line + ':' + site.column : '';
+			const siteText = site ? fileBaseName(site.fileName) + ':' + site.line + ':' + site.column : '';
 			const siteRow = site
 				? '<span class="jump-entry" style="cursor:pointer;text-decoration:underline">' + siteText + '</span>'
 				: '';
@@ -4639,7 +4723,7 @@ window.acquireVsCodeApi = function () {
 				return;
 			}
 			const site = node.location;
-			const siteText = site ? site.fileName.split('/').pop() + ':' + site.line + ':' + site.column : '';
+			const siteText = site ? fileBaseName(site.fileName) + ':' + site.line + ':' + site.column : '';
 			const siteRow = site
 				? '<span class="jump-entry" style="cursor:pointer;text-decoration:underline">' + siteText + '</span>'
 				: '';
@@ -4647,7 +4731,7 @@ window.acquireVsCodeApi = function () {
 			if (node.wrapsTypePath) { relations.push('wraps: ' + node.wrapsTypePath); }
 			if (node.hostTypePath) { relations.push('produced by: ' + node.hostTypePath); }
 			if (node.callbackScopeId || node.holderScopeId) {
-				const scopeName = (node.callbackScopeId || node.holderScopeId).split('/').pop();
+				const scopeName = fileBaseName(node.callbackScopeId || node.holderScopeId);
 				relations.push('scope: ' + scopeName);
 			}
 			if (relations.length === 0) {
@@ -6367,21 +6451,30 @@ window.acquireVsCodeApi = function () {
 
 			// Direction matters (caller → callee): one arrowhead cone per
 			// call edge, rewritten together with the segment endpoints.
-			// Arrows ride creationMeshes for disposal but carry no
-			// creationNode, so the interactive filter never grabs them
+			// ONE InstancedMesh carries them all — a real callers graph has
+			// thousands of call edges, and a mesh each was most of the
+			// scene's draw calls (twice that in VR, one pass per eye).
+			// Like the batched segments, a hidden arrow has no object to
+			// hang a getter on: its instance gets a zero-scale matrix,
+			// which rasterizes nothing. It rides creationMeshes for
+			// disposal but carries no creationNode, so the interactive
+			// filter never grabs it
 			const callArrowGeometry = new THREE.ConeGeometry(1.4, 4, 8);
 			callArrowGeometry.rotateX(Math.PI / 2); // tip along +Z
 			const callArrowMaterial = new THREE.MeshBasicMaterial({ color: 0x8a7ca8, transparent: true, opacity: 0.85 });
 			this.creationGeometries.push(callArrowGeometry);
 			this.creationMaterials.push(callArrowMaterial);
-			const callArrows = pairs.map(pair => {
-				const arrow = new THREE.Mesh(callArrowGeometry, callArrowMaterial);
-				arrow.userData = {};
-				this.instrumentationGroup.add(arrow);
-				this.creationMeshes.push(arrow);
-				const entry = { arrow, pair };
-				return entry;
-			});
+			const callArrows = new THREE.InstancedMesh(callArrowGeometry, callArrowMaterial, Math.max(pairs.length, 1));
+			callArrows.count = pairs.length;
+			callArrows.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+			// Instances move with the dynamics; the bounding sphere of the
+			// base cone would cull the whole batch wrongly
+			callArrows.frustumCulled = false;
+			callArrows.userData = {};
+			this.instrumentationGroup.add(callArrows);
+			this.creationMeshes.push(callArrows);
+			const arrowScratch = new THREE.Object3D();
+			const hiddenArrow = new THREE.Matrix4().makeScale(0, 0, 0);
 
 			this.creationDynamics.push(() => {
 				holderRecords.forEach(record => {
@@ -6484,7 +6577,7 @@ window.acquireVsCodeApi = function () {
 					ep[i * 6 + 5] = pairVisible ? pair.to.position.z : pair.from.position.z;
 				});
 				edgeSegments.geometry.attributes.position.needsUpdate = true;
-				callArrows.forEach(({ arrow, pair }) => {
+				pairs.forEach((pair, i) => {
 					const a = pair.from.position;
 					const b = pair.to.position;
 					const dx = b.x - a.x;
@@ -6492,13 +6585,17 @@ window.acquireVsCodeApi = function () {
 					const dz = b.z - a.z;
 					const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
 					const gap = nodeRadius * 0.7;
-					arrow.visible = pair.from.visible && pair.to.visible && len > gap;
-					if (arrow.visible) {
+					if (pair.from.visible && pair.to.visible && len > gap) {
 						const ratio = (len - gap) / len;
-						arrow.position.set(a.x + dx * ratio, a.y + dy * ratio, a.z + dz * ratio);
-						arrow.lookAt(b.x, b.y, b.z);
+						arrowScratch.position.set(a.x + dx * ratio, a.y + dy * ratio, a.z + dz * ratio);
+						arrowScratch.lookAt(b.x, b.y, b.z);
+						arrowScratch.updateMatrix();
+						callArrows.setMatrixAt(i, arrowScratch.matrix);
+					} else {
+						callArrows.setMatrixAt(i, hiddenArrow);
 					}
 				});
+				callArrows.instanceMatrix.needsUpdate = true;
 			});
 
 			// Place everything before the first frame paints
@@ -7537,7 +7634,11 @@ window.acquireVsCodeApi = function () {
 				pivot       : new THREE.Vector3(),
 				fitScale    : 1,
 				lastTick    : 0,
-				raycaster   : new THREE.Raycaster()
+				raycaster   : new THREE.Raycaster(),
+				// XR frames painted and the last one's time — the page's
+				// no-frames watchdog reads them
+				frames      : 0,
+				lastFrameAt : 0
 			};
 			// Fog distances are graph units: over a metre-sized model they
 			// never bite — XR draws without fog
@@ -7727,6 +7828,8 @@ window.acquireVsCodeApi = function () {
 			const now = performance.now();
 			const dt = xr.lastTick ? Math.min((now - xr.lastTick) / 1000, 0.1) : 0;
 			xr.lastTick = now;
+			xr.frames++;
+			xr.lastFrameAt = now;
 			const root = this.graphRoot;
 			if (xr.grab) {
 				// The model rides the hand rigidly: hand × hand₀⁻¹ × root₀
@@ -7860,7 +7963,7 @@ window.acquireVsCodeApi = function () {
 		// facts, and the jump hint when there is code to jump to
 		xrCardLines(mesh) {
 			const site = (location) => (location && typeof location === 'object' && location.fileName)
-				? location.fileName.split('/').pop() + ':' + location.line
+				? fileBaseName(location.fileName) + ':' + location.line
 				: null;
 			const data = mesh.userData;
 			const body = [];
@@ -8022,6 +8125,9 @@ window.acquireVsCodeApi = function () {
 					mesh.parent.remove(mesh);
 				}
 				mesh.material.dispose();
+				if (mesh.isInstancedMesh) {
+					mesh.dispose();
+				}
 			});
 			this.creationMeshes = [];
 			this.creationMeshById = new Map();

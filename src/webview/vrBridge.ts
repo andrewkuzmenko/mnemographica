@@ -78,7 +78,16 @@ export type VrBridgeOptions = {
 	port?: () => number;
 	libraries?: vrLibrary[];
 	log?: (message: string) => void;
+	// How long open() waits for the libraries before returning anyway
+	// (the page then loads whatever is local when it is requested, the
+	// CDN for the rest); default VR_LIBRARY_WAIT_MS
+	libraryWaitMs?: number;
+	// Per-download timeout; default VR_LIBRARY_FETCH_TIMEOUT_MS
+	fetchTimeoutMs?: number;
 };
+
+export const VR_LIBRARY_WAIT_MS = 3000;
+export const VR_LIBRARY_FETCH_TIMEOUT_MS = 20000;
 
 // The files the bridge page loads besides itself — the panel's own
 // stylesheet and app script, served from the extension's media folder
@@ -86,6 +95,29 @@ const MEDIA_TYPES = new Map([
 	['webview.css', 'text/css; charset=utf-8'],
 	['webview.js', 'text/javascript; charset=utf-8']
 ]);
+
+/**
+ * A Quest on USB without Link: forward the bridge port into the headset
+ * (127.0.0.1 there is a secure context, so WebXR works on plain http),
+ * then open the page in Quest Browser. Returned as argument vectors for
+ * `adb` — run without a shell, nothing depends on the user's terminal.
+ */
+export function questAdbSteps (url: string): string[][] {
+	const port = new URL(url).port;
+	const steps = [
+		['reverse', `tcp:${port}`, `tcp:${port}`],
+		['shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', url, 'com.oculus.browser']
+	];
+	return steps;
+}
+
+// The same steps as text to paste: one command per line, no quoting and
+// no `&&`, so cmd, PowerShell and POSIX shells all run it as-is (the URL
+// holds only [0-9a-f:/.] characters)
+export function questAdbCommand (url: string): string {
+	const text = questAdbSteps(url).map(step => ['adb', ...step].join(' ')).join('\n');
+	return text;
+}
 
 // Close code the bridge sends when a panel goes away: the page stops
 // reconnecting (VR_PAGE_BOOT)
@@ -146,6 +178,7 @@ export class VrBridge {
 	private readonly sessions = new Map<string, vrSession>();
 	// Library name → its verified local file
 	private readonly libraryFiles = new Map<string, string>();
+	private librariesPass: Promise<void> | null = null;
 	private readonly mediaRoot: string;
 	private readonly libraries: vrLibrary[];
 	private readonly log: (message: string) => void;
@@ -158,13 +191,20 @@ export class VrBridge {
 
 	/**
 	 * Register a panel and return its page URL; starts the server on
-	 * first use and makes the libraries local first, so the page served
-	 * from now on can point at /lib/. The token stays valid until
-	 * close(token) or dispose().
+	 * first use and makes the libraries local, waiting at most
+	 * libraryWaitMs — a slow or blocked download never holds the click
+	 * up: it keeps running, and pages requested after it lands point at
+	 * /lib/. The token stays valid until close(token) or dispose().
 	 */
 	async open (host: VrSessionHost): Promise<{ token: string; url: string }> {
 		const port = await this.start();
-		await this.ensureLibraries();
+		const waitMs = this.options.libraryWaitMs ?? VR_LIBRARY_WAIT_MS;
+		let timer: NodeJS.Timeout | undefined;
+		await Promise.race([
+			this.ensureLibraries(),
+			new Promise<void>(resolve => { timer = setTimeout(resolve, waitMs); })
+		]);
+		clearTimeout(timer);
 		const token = crypto.randomBytes(24).toString('hex');
 		this.sessions.set(token, { host, sockets: new Set() });
 		const opened = { token, url: `http://127.0.0.1:${port}/vr/${token}` };
@@ -223,9 +263,21 @@ export class VrBridge {
 		this.listening = null;
 	}
 
+	// One pass at a time: concurrent opens share it, so two downloads
+	// never race on the same .part file. A pass that leaves a library
+	// missing is retried by the next open()
+	private ensureLibraries (): Promise<void> {
+		if (!this.librariesPass) {
+			this.librariesPass = this.fetchLibraries().finally(() => {
+				this.librariesPass = null;
+			});
+		}
+		return this.librariesPass;
+	}
+
 	// Find or fetch every library not yet local. Never throws: a library
 	// that stays missing makes the page use the CDN
-	private async ensureLibraries (): Promise<void> {
+	private async fetchLibraries (): Promise<void> {
 		const cacheDir = this.options.cacheDir;
 		for (const library of this.libraries) {
 			if (this.libraryFiles.has(library.name)) {
@@ -244,7 +296,8 @@ export class VrBridge {
 				continue;
 			}
 			try {
-				const response = await fetch(library.url);
+				const timeoutMs = this.options.fetchTimeoutMs ?? VR_LIBRARY_FETCH_TIMEOUT_MS;
+				const response = await fetch(library.url, { signal: AbortSignal.timeout(timeoutMs) });
 				if (!response.ok) {
 					throw new Error(`HTTP ${response.status}`);
 				}
